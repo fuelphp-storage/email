@@ -15,10 +15,10 @@
 		"php": ">=5.3.3"
 	},
 	"require-dev": {
-		"mockery/mockery": "0.7.*"
+		"codeception/codeception": "1.8"
 	},
 	"autoload": {
-		"psr-0": { "FuelPHP\\Email": "src/" }
+		"psr-4": { "Fuel\\Email\\": "src/" }
 	},
 	"minimum-stability": "dev"
 }
