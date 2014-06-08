@@ -28,6 +28,13 @@ class Message
 	protected $from;
 
 	/**
+	 * Recipients
+	 *
+	 * @var Recipient[]
+	 */
+	protected $recipients = [];
+
+	/**
 	 * Reply-To address
 	 *
 	 * @var Address[]
@@ -65,6 +72,48 @@ class Message
 	public function setFrom(Address $from)
 	{
 		$this->from = $from;
+
+		return $this;
+	}
+
+	/**
+	 * Adds a recipient
+	 *
+	 * @param Recipient $recipient
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function addRecipient(Recipient $recipient)
+	{
+		$this->recipients[] = $recipient;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the list of recipients
+	 *
+	 * @return Recipient[]
+	 *
+	 * @since 2.0
+	 */
+	public function getRecipients()
+	{
+		return $this->recipients;
+	}
+
+	/**
+	 * Clears the list of recipients
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function clearRecipients()
+	{
+		$this->recipients = [];
 
 		return $this;
 	}

@@ -47,6 +47,44 @@ class MessageTest extends Test
 	}
 
 	/**
+	 * @covers ::addRecipient
+	 * @covers ::getRecipients
+	 * @covers ::clearRecipients
+	 * @group  Email
+	 */
+	public function testRecipient()
+	{
+		$recipient = \Mockery::mock('Fuel\\Email\\Recipient');
+
+		$this->assertSame($this->object, $this->object->addRecipient($recipient));
+
+		$this->assertEquals([$recipient], $this->object->getRecipients());
+
+		$this->assertSame($this->object, $this->object->clearRecipients());
+
+		$this->assertEquals([], $this->object->getRecipients());
+	}
+
+	/**
+	 * @covers ::addReplyTo
+	 * @covers ::getReplyTo
+	 * @covers ::clearReplyTo
+	 * @group  Email
+	 */
+	public function testReplyTo()
+	{
+		$replyTo = \Mockery::mock('Fuel\\Email\\Address');
+
+		$this->assertSame($this->object, $this->object->addReplyTo($replyTo));
+
+		$this->assertEquals([$replyTo], $this->object->getReplyTo());
+
+		$this->assertSame($this->object, $this->object->clearReplyTo());
+
+		$this->assertEquals([], $this->object->getReplyTo());
+	}
+
+	/**
 	 * @covers ::getSubject
 	 * @covers ::setSubject
 	 * @group  Email
@@ -58,24 +96,5 @@ class MessageTest extends Test
 		$this->assertSame($this->object, $this->object->setSubject($subject));
 
 		$this->assertEquals($subject, $this->object->getSubject());
-	}
-
-	/**
-	 * @covers ::addReplyTo
-	 * @covers ::getReplyTo
-	 * @covers ::clearReplyTo
-	 * @group  Email
-	 */
-	public function testReplyTo()
-	{
-		$replyTo = new Address('john@doe.com', 'John Doe');
-
-		$this->assertSame($this->object, $this->object->addReplyTo($replyTo));
-
-		$this->assertEquals([$replyTo], $this->object->getReplyTo());
-
-		$this->assertSame($this->object, $this->object->clearReplyTo());
-
-		$this->assertEquals([], $this->object->getReplyTo());
 	}
 }
