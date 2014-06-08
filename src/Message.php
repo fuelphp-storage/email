@@ -28,6 +28,13 @@ class Message
 	protected $from;
 
 	/**
+	 * Reply-To address
+	 *
+	 * @var Address[]
+	 */
+	protected $replyTo = [];
+
+	/**
 	 * Mail subject
 	 *
 	 * @var string
@@ -58,6 +65,48 @@ class Message
 	public function setFrom(Address $from)
 	{
 		$this->from = $from;
+
+		return $this;
+	}
+
+	/**
+	 * Adds Reply-To address
+	 *
+	 * @param Address $replyTo
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function addReplyTo(Address $replyTo)
+	{
+		$this->replyTo[] = $replyTo;
+
+		return $this;
+	}
+
+	/**
+	 * Gets Reply-To adresses
+	 *
+	 * @return Address[]
+	 *
+	 * @since 2.0
+	 */
+	public function getReplyTo()
+	{
+		return $this->replyTo;
+	}
+
+	/**
+	 * Clears Reply-To addresses
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function clearReplyTo()
+	{
+		$this->replyTo = [];
 
 		return $this;
 	}

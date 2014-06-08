@@ -59,4 +59,23 @@ class MessageTest extends Test
 
 		$this->assertEquals($subject, $this->object->getSubject());
 	}
+
+	/**
+	 * @covers ::addReplyTo
+	 * @covers ::getReplyTo
+	 * @covers ::clearReplyTo
+	 * @group  Email
+	 */
+	public function testReplyTo()
+	{
+		$replyTo = new Address('john@doe.com', 'John Doe');
+
+		$this->assertSame($this->object, $this->object->addReplyTo($replyTo));
+
+		$this->assertEquals([$replyTo], $this->object->getReplyTo());
+
+		$this->assertSame($this->object, $this->object->clearReplyTo());
+
+		$this->assertEquals([], $this->object->getReplyTo());
+	}
 }
