@@ -45,4 +45,18 @@ class MessageTest extends Test
 
 		$this->assertEquals($from, $this->object->getFrom());
 	}
+
+	/**
+	 * @covers ::getSubject
+	 * @covers ::setSubject
+	 * @group  Email
+	 */
+	public function testSubject()
+	{
+		$subject = 'subject';
+
+		$this->assertSame($this->object, $this->object->setSubject($subject));
+
+		$this->assertEquals($subject, $this->object->getSubject());
+	}
 }

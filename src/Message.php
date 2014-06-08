@@ -28,6 +28,13 @@ class Message
 	protected $from;
 
 	/**
+	 * Mail subject
+	 *
+	 * @var string
+	 */
+	protected $subject;
+
+	/**
 	 * Gets From address
 	 *
 	 * @return Address
@@ -51,6 +58,34 @@ class Message
 	public function setFrom(Address $from)
 	{
 		$this->from = $from;
+
+		return $this;
+	}
+
+	/**
+	 * Gets subject
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getSubject()
+	{
+		return $this->subject;
+	}
+
+	/**
+	 * Sets subject
+	 *
+	 * @param string $subject
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setSubject($subject)
+	{
+		$this->subject = $subject;
 
 		return $this;
 	}
