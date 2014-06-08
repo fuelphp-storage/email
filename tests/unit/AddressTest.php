@@ -82,4 +82,19 @@ class AddressTest extends Test
 
 		$this->assertEquals('john@doe.com', (string) $this->object);
 	}
+
+	/**
+	 * @covers ::__construct
+	 * @group  Email
+	 */
+	public function testConstruct()
+	{
+		$email = 'john@doe.com';
+		$name = 'John Doe';
+
+		$object = new Address($email, $name);
+
+		$this->assertEquals($email, $object->getEmail());
+		$this->assertEquals($name, $object->getName());
+	}
 }
