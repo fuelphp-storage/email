@@ -438,4 +438,18 @@ class Message
 
 		return $this;
 	}
+
+	/**
+	 * Returns unique id for the message
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getId()
+	{
+		$from = $this->from->getEmail();
+
+		return "<".uniqid('').strstr($from, '@').">";
+	}
 }

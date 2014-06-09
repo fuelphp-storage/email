@@ -102,6 +102,7 @@ class MessageTest extends Test
 	 * @covers ::attach
 	 * @covers ::getAttachments
 	 * @covers ::clearAttachments
+	 * @covers ::hasAttachments
 	 * @group  Email
 	 */
 	public function testAttachment()
@@ -192,6 +193,23 @@ class MessageTest extends Test
 		$value = 'value';
 
 		$this->assertSame($this->object, $this->object->setMeta($key, $value));
+
 		$this->assertEquals($value, $this->object->getMeta($key));
+	}
+
+	/**
+	 * @covers ::getId
+	 * @group  Email
+	 */
+	public function testId()
+	{
+		$email = 'john@doe.com';
+		$from = \Mockery::mock('Fuel\\Email\\Address');
+		$from->shouldReceive('getEmail')
+			->andReturn($email);
+
+		$this->object->setFrom($from);
+
+		$this->assertRegExp('/<(?:.*)(?:@doe.com)>/', $this->object->getId());
 	}
 }
