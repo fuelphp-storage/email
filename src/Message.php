@@ -10,6 +10,8 @@
 
 namespace Fuel\Email;
 
+use InvalidArgumentException;
+
 /**
  * Handles message data
  *
@@ -54,6 +56,13 @@ class Message
 	 * @var AttachmentInterface[]
 	 */
 	protected $attachments = [];
+
+	/**
+	 * Custom headers
+	 *
+	 * @var []
+	 */
+	protected $headers = [];
 
 	/**
 	 * Gets From address
@@ -233,6 +242,64 @@ class Message
 	public function clearAttachments()
 	{
 		$this->attachments = [];
+
+		return $this;
+	}
+
+	/**
+	 * Adds a custom header
+	 *
+	 * @param string|[] $header
+	 * @param string    $value
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function addHeader($header, $value = null)
+	{
+		if(is_array($header))
+		{
+			foreach($header as $_header => $_value)
+			{
+				$this->addHeader($_header, $_value);
+			}
+		}
+		else
+		{
+			if (empty($value))
+			{
+				throw new InvalidArgumentException('EMA-003: Header value cannot be empty.');
+			}
+
+			$this->headers[$header] = $value;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Gets the list of custom headers
+	 *
+	 * @return []
+	 *
+	 * @since 2.0
+	 */
+	public function getHeaders()
+	{
+		return $this->headers;
+	}
+
+	/**
+	 * Clears the list of custom headers
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function clearHeaders()
+	{
+		$this->headers = [];
 
 		return $this;
 	}

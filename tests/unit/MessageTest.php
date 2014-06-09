@@ -116,4 +116,36 @@ class MessageTest extends Test
 
 		$this->assertEquals([], $this->object->getAttachments());
 	}
+
+	/**
+	 * @covers ::addHeader
+	 * @covers ::getHeaders
+	 * @covers ::clearHeaders
+	 * @group  Email
+	 */
+	public function testHeaders()
+	{
+		$header = 'X-Test';
+		$value = 'Header Value';
+
+		$this->assertSame($this->object, $this->object->addHeader($header, $value));
+
+		$this->assertEquals([$header => $value], $this->object->getHeaders());
+
+		$this->assertSame($this->object, $this->object->clearHeaders());
+
+		$this->assertEquals([], $this->object->getHeaders());
+
+		$this->assertSame($this->object, $this->object->addHeader([$header => $value]));
+	}
+
+	/**
+	 * @covers            ::addHeader
+	 * @expectedException InvalidArgumentException
+	 * @group             Email
+	 */
+	public function testHeadersFailure()
+	{
+		$this->object->addHeader('X-Test');
+	}
 }
