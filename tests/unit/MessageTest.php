@@ -118,6 +118,20 @@ class MessageTest extends Test
 	}
 
 	/**
+	 * @covers ::getPriority
+	 * @covers ::setPriority
+	 * @group  Email
+	 */
+	public function testPriority()
+	{
+		$priority = Message::HIGHEST;
+
+		$this->assertSame($this->object, $this->object->setPriority($priority));
+
+		$this->assertEquals($priority, $this->object->getPriority());
+	}
+
+	/**
 	 * @covers ::addHeader
 	 * @covers ::getHeaders
 	 * @covers ::clearHeaders

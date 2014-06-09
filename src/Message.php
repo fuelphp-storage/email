@@ -23,6 +23,15 @@ use InvalidArgumentException;
 class Message
 {
 	/**
+	 * Email priorities
+	 */
+	const HIGHEST = '1 (Highest)';
+	const HIGH    = '2 (High)';
+	const NORMAL  = '3 (Normal)';
+	const LOW     = '4 (Low)';
+	const LOWEST  = '5 (Lowest)';
+
+	/**
 	 * From address
 	 *
 	 * @var Address
@@ -56,6 +65,13 @@ class Message
 	 * @var AttachmentInterface[]
 	 */
 	protected $attachments = [];
+
+	/**
+	 * Mail priority
+	 *
+	 * @var string
+	 */
+	protected $priority;
 
 	/**
 	 * Custom headers
@@ -242,6 +258,34 @@ class Message
 	public function clearAttachments()
 	{
 		$this->attachments = [];
+
+		return $this;
+	}
+
+	/**
+	 * Gets the priority
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getPriority()
+	{
+		return $this->priority;
+	}
+
+	/**
+	 * Sets the priority
+	 *
+	 * @param string $priority One of the priority constants of this class
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setPriority($priority = Message::NORMAL)
+	{
+		$this->priority = $priority;
 
 		return $this;
 	}
