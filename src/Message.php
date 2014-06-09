@@ -49,6 +49,13 @@ class Message
 	protected $subject;
 
 	/**
+	 * Attachments
+	 *
+	 * @var AttachmentInterface[]
+	 */
+	protected $attachments = [];
+
+	/**
 	 * Gets From address
 	 *
 	 * @return Address
@@ -93,7 +100,7 @@ class Message
 	}
 
 	/**
-	 * Returns the list of recipients
+	 * Gets the list of recipients
 	 *
 	 * @return Recipient[]
 	 *
@@ -184,6 +191,48 @@ class Message
 	public function setSubject($subject)
 	{
 		$this->subject = $subject;
+
+		return $this;
+	}
+
+	/**
+	 * Adds an attachment
+	 *
+	 * @param  AttachmentInterface $attachment
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function attach(AttachmentInterface $attachment)
+	{
+		$this->attachments[] = $attachment;
+
+		return $this;
+	}
+
+	/**
+	 * Gets the list of attachments
+	 *
+	 * @return AttachmentInterface[]
+	 *
+	 * @since 2.0
+	 */
+	public function getAttachments()
+	{
+		return $this->attachments;
+	}
+
+	/**
+	 * Clears the list of attachments
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function clearAttachments()
+	{
+		$this->attachments = [];
 
 		return $this;
 	}

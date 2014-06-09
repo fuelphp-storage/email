@@ -97,4 +97,23 @@ class MessageTest extends Test
 
 		$this->assertEquals($subject, $this->object->getSubject());
 	}
+
+	/**
+	 * @covers ::attach
+	 * @covers ::getAttachments
+	 * @covers ::clearAttachments
+	 * @group  Email
+	 */
+	public function testAttachment()
+	{
+		$attachment = \Mockery::mock('Fuel\\Email\\AttachmentInterface');
+
+		$this->assertSame($this->object, $this->object->attach($attachment));
+
+		$this->assertEquals([$attachment], $this->object->getAttachments());
+
+		$this->assertSame($this->object, $this->object->clearAttachments());
+
+		$this->assertEquals([], $this->object->getAttachments());
+	}
 }
