@@ -265,6 +265,18 @@ class Message
 	}
 
 	/**
+	 * Checks if there are attachments
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function hasAttachments()
+	{
+		return ! empty($this->attachments);
+	}
+
+	/**
 	 * Clears the list of attachments
 	 *
 	 * @return Message

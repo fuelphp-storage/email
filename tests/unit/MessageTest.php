@@ -112,9 +112,13 @@ class MessageTest extends Test
 
 		$this->assertEquals([$attachment], $this->object->getAttachments());
 
+		$this->assertTrue($this->object->hasAttachments());
+
 		$this->assertSame($this->object, $this->object->clearAttachments());
 
 		$this->assertEquals([], $this->object->getAttachments());
+
+		$this->assertFalse($this->object->hasAttachments());
 	}
 
 	/**
