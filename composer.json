@@ -13,7 +13,7 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"ext-fileinfo": "*"
+		"fuelphp/filesystem": "dev-master"
 	},
 	"require-dev": {
 		"codeception/codeception": "1.8",

@@ -20,9 +20,23 @@ namespace Fuel\Email\Attachment;
  */
 class FileTest extends AbstractAttachmentTest
 {
+	protected $mock;
+
 	public function _before()
 	{
-		$this->object = new File(__DIR__.'/../../_data/dummy.txt');
+		$this->mock = \Mockery::mock('Fuel\\FileSystem\\File', function($mock) {
+			$mock->shouldReceive('exists')
+				->andReturn(true)
+				->byDefault();
+
+			$mock->shouldReceive('getContents')
+				->andReturn('This is a test file');
+
+			$mock->shouldReceive('getMime')
+				->andReturn('text/plain');
+		});
+
+		$this->object = new File($this->mock);
 	}
 
 	/**
@@ -31,20 +45,19 @@ class FileTest extends AbstractAttachmentTest
 	 */
 	public function testFile()
 	{
-		$this->assertEquals(realpath(__DIR__.'/../../_data/dummy.txt'), $this->object->getFile());
-		$this->assertEquals('dummy.txt', $this->object->getName());
+		$this->assertEquals($this->mock, $this->object->getFile());
+		$this->assertEquals((string) $this->mock, $this->object->getName());
 		$this->assertEquals('This is a test file', $this->object->getContents());
 		$this->assertEquals('text/plain', $this->object->getMime());
 	}
 
 	/**
 	 * @covers ::__construct
-	 * @covers ::detectMime
 	 * @group  Email
 	 */
 	public function testContstruct()
 	{
-		$object = new File(__DIR__.'/../../_data/dummy.txt', 'name');
+		$object = new File($this->mock, 'name');
 
 		$this->assertEquals('name', $object->getName());
 	}
@@ -56,6 +69,9 @@ class FileTest extends AbstractAttachmentTest
 	 */
 	public function testContstructFailure()
 	{
-		new File('FAKE_FILE');
+		$this->mock->shouldReceive('exists')
+			->andReturn(false);
+
+		new File($this->mock);
 	}
 }

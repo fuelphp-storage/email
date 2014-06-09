@@ -10,7 +10,7 @@
 
 namespace Fuel\Email\Attachment;
 
-use finfo;
+use Fuel\FileSystem\File as FileObject;
 use InvalidArgumentException;
 
 /**
@@ -24,29 +24,27 @@ use InvalidArgumentException;
 class File extends Attachment
 {
 	/**
-	 * File path
+	 * File object
 	 *
-	 * @var string
+	 * @var FileObject
 	 */
 	protected $file;
 
-	public function __construct($file, $name = null)
+	public function __construct(FileObject $file, $name = null)
 	{
-		if (is_file($file) === false or ($contents = file_get_contents($file)) === false or empty($contents))
+		if (($file->exists() and $contents = $file->getContents()) === false or empty($contents))
 		{
 			throw new InvalidArgumentException('The file does not exists, not readable or empty');
 		}
 
 		if ($name === null)
 		{
-			$name = pathinfo($file, PATHINFO_BASENAME);
+			$name = pathinfo((string) $file, PATHINFO_BASENAME);
 		}
 
-		$mime = $this->detectMime($file);
+		$this->file = $file;
 
-		$this->file = realpath($file);
-
-		parent::__construct($name, $contents, $mime);
+		parent::__construct($name, $contents, $file->getMime());
 	}
 
 	/**
@@ -59,31 +57,5 @@ class File extends Attachment
 	public function getFile()
 	{
 		return $this->file;
-	}
-
-	/**
-	 * Detect mime type of file
-	 *
-	 * @param  string $file
-	 *
-	 * @return string
-	 *
-	 * @since 2.0
-	 */
-	protected function detectMime($file)
-	{
-		static $finfo;
-
-		if ($finfo === null)
-		{
-			$finfo = new finfo(FILEINFO_MIME_TYPE);
-		}
-
-		if (($mime = $finfo->file($file)) === false)
-		{
-			$mime = 'application/octet-stream';
-		}
-
-		return $mime;
 	}
 }
