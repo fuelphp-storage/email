@@ -32,6 +32,9 @@ class FileTest extends AbstractAttachmentTest
 			$mock->shouldReceive('getContents')
 				->andReturn('This is a test file');
 
+			$mock->shouldReceive('getPath')
+				->andReturn(realpath(__DIR__.'/../../_data/dummy.txt'));
+
 			$mock->shouldReceive('getMime')
 				->andReturn('text/plain');
 		});
@@ -46,7 +49,7 @@ class FileTest extends AbstractAttachmentTest
 	public function testFile()
 	{
 		$this->assertEquals($this->mock, $this->object->getFile());
-		$this->assertEquals((string) $this->mock, $this->object->getName());
+		$this->assertEquals('dummy.txt', $this->object->getName());
 		$this->assertEquals('This is a test file', $this->object->getContents());
 		$this->assertEquals('text/plain', $this->object->getMime());
 	}

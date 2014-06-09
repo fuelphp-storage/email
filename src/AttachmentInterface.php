@@ -21,7 +21,7 @@ namespace Fuel\Email;
 interface AttachmentInterface
 {
 	/**
-	 * Gets attachment name
+	 * Returns attachment name
 	 *
 	 * @return string
 	 *
@@ -39,7 +39,7 @@ interface AttachmentInterface
 	public function setName($name);
 
 	/**
-	 * Gets content
+	 * Returns content
 	 *
 	 * @return string
 	 *
@@ -59,7 +59,7 @@ interface AttachmentInterface
 	public function setContents($contents);
 
 	/**
-	 * Gets mime type
+	 * Returns mime type
 	 *
 	 * @return string
 	 *

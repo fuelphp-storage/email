@@ -65,7 +65,7 @@ class Message
 	protected $headers = [];
 
 	/**
-	 * Gets From address
+	 * Returns From address
 	 *
 	 * @return Address
 	 *
@@ -109,7 +109,7 @@ class Message
 	}
 
 	/**
-	 * Gets the list of recipients
+	 * Returns the list of recipients
 	 *
 	 * @return Recipient[]
 	 *
@@ -151,7 +151,7 @@ class Message
 	}
 
 	/**
-	 * Gets Reply-To adresses
+	 * Returns Reply-To adresses
 	 *
 	 * @return Address[]
 	 *
@@ -177,7 +177,7 @@ class Message
 	}
 
 	/**
-	 * Gets subject
+	 * Returns subject
 	 *
 	 * @return string
 	 *
@@ -221,7 +221,7 @@ class Message
 	}
 
 	/**
-	 * Gets the list of attachments
+	 * Returns the list of attachments
 	 *
 	 * @return AttachmentInterface[]
 	 *
@@ -279,7 +279,7 @@ class Message
 	}
 
 	/**
-	 * Gets the list of custom headers
+	 * Returns the list of custom headers
 	 *
 	 * @return []
 	 *

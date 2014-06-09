@@ -39,7 +39,7 @@ class File extends Attachment
 
 		if ($name === null)
 		{
-			$name = pathinfo((string) $file, PATHINFO_BASENAME);
+			$name = pathinfo($file->getPath(), PATHINFO_BASENAME);
 		}
 
 		$this->file = $file;
@@ -48,9 +48,9 @@ class File extends Attachment
 	}
 
 	/**
-	 * Returns file path
+	 * Returns FileObject
 	 *
-	 * @return string
+	 * @return FileObject
 	 *
 	 * @since 2.0
 	 */
