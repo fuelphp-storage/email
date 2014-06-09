@@ -104,6 +104,18 @@ class Address
 	}
 
 	/**
+	 * Check whether a name is set
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function hasName()
+	{
+		return isset($this->name);
+	}
+
+	/**
 	 * Returns a formatted address
 	 *
 	 * @return string

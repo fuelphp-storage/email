@@ -29,7 +29,7 @@ class AddressTest extends Test
 
 	public function _before()
 	{
-		$this->object = new Address('john@doe.com', 'John Doe');
+		$this->object = new Address('john@doe.com');
 	}
 
 	/**
@@ -59,6 +59,7 @@ class AddressTest extends Test
 	/**
 	 * @covers ::getName
 	 * @covers ::setName
+	 * @covers ::hasName
 	 * @group  Email
 	 */
 	public function testName()
@@ -66,8 +67,8 @@ class AddressTest extends Test
 		$name = 'Jane Doe';
 
 		$this->assertSame($this->object, $this->object->setName($name));
-
 		$this->assertEquals($name, $this->object->getName());
+		$this->assertTrue($this->object->hasName());
 	}
 
 	/**
@@ -76,11 +77,11 @@ class AddressTest extends Test
 	 */
 	public function testString()
 	{
-		$this->assertEquals('"John Doe" <john@doe.com>', (string) $this->object);
-
-		$this->object->setName(null);
-
 		$this->assertEquals('john@doe.com', (string) $this->object);
+
+		$this->object->setName('John Doe');
+
+		$this->assertEquals('"John Doe" <john@doe.com>', (string) $this->object);
 	}
 
 	/**
