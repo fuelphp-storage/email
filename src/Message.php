@@ -10,6 +10,7 @@
 
 namespace Fuel\Email;
 
+use Fuel\Common\Arr;
 use InvalidArgumentException;
 
 /**
@@ -87,6 +88,13 @@ class Message
 	 * @var []
 	 */
 	protected $headers = [];
+
+	/**
+	 * Used to contain any meta information to associate with this message
+	 *
+	 * @var []
+	 */
+	protected $metaContainer = [];
 
 	/**
 	 * Returns From address
@@ -321,7 +329,7 @@ class Message
 	 */
 	public static function getPriorityName($priority)
 	{
-		if (isset(static::$priorities[$priority]) === false)
+		if (Arr::has(static::$priorities, $priority) === false)
 		{
 			throw new InvalidArgumentException('EMA-004: This priority is not defined, use one of the following. ['.$priority.', ['.implode(', ', array_keys(static::$priorities)) . ']]');
 		}
@@ -383,6 +391,38 @@ class Message
 	public function clearHeaders()
 	{
 		$this->headers = [];
+
+		return $this;
+	}
+
+	/**
+	 * Returns meta data
+	 *
+	 * @param  string $key
+	 * @param  mixed $default
+	 *
+	 * @return mixed
+	 *
+	 * @since 2.0
+	 */
+	public function getMeta($key, $default = null)
+	{
+		return Arr::get($this->metaContainer, $key, $default);
+	}
+
+	/**
+	 * Sets meta data
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setMeta($key, $value = null)
+	{
+		Arr::set($this->metaContainer, $key, $value);
 
 		return $this;
 	}

@@ -176,4 +176,18 @@ class MessageTest extends Test
 	{
 		$this->object->addHeader('X-Test');
 	}
+
+	/**
+	 * @covers ::getMeta
+	 * @covers ::setMeta
+	 * @group  Email
+	 */
+	public function testMeta()
+	{
+		$key = 'key';
+		$value = 'value';
+
+		$this->assertSame($this->object, $this->object->setMeta($key, $value));
+		$this->assertEquals($value, $this->object->getMeta($key));
+	}
 }
