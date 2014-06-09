@@ -25,11 +25,19 @@ class Message
 	/**
 	 * Email priorities
 	 */
-	const HIGHEST = '1 (Highest)';
-	const HIGH    = '2 (High)';
-	const NORMAL  = '3 (Normal)';
-	const LOW     = '4 (Low)';
-	const LOWEST  = '5 (Lowest)';
+	const HIGHEST = 1;
+	const HIGH    = 2;
+	const NORMAL  = 3;
+	const LOW     = 4;
+	const LOWEST  = 5;
+
+	protected static $priorities = [
+		1 => 'HIGHEST',
+		2 => 'HIGH',
+		3 => 'NORMAL',
+		4 => 'LOW',
+		5 => 'LOWEST',
+	];
 
 	/**
 	 * From address
@@ -285,9 +293,40 @@ class Message
 	 */
 	public function setPriority($priority = Message::NORMAL)
 	{
-		$this->priority = $priority;
+		$this->priority = $this->getPriorityName($priority);
 
 		return $this;
+	}
+
+	/**
+	 * Returns a list of priorities
+	 *
+	 * @return []
+	 *
+	 * @since 2.0
+	 */
+	public static function getPriorities()
+	{
+		return array_flip(static::$priorities);
+	}
+
+	/**
+	 * Returns priority name
+	 *
+	 * @param  integer $priority
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public static function getPriorityName($priority)
+	{
+		if (isset(static::$priorities[$priority]) === false)
+		{
+			throw new InvalidArgumentException('EMA-004: This priority is not defined, use one of the following. ['.$priority.', ['.implode(', ', array_keys(static::$priorities)) . ']]');
+		}
+
+		return static::$priorities[$priority];
 	}
 
 	/**

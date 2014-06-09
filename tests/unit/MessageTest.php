@@ -120,15 +120,29 @@ class MessageTest extends Test
 	/**
 	 * @covers ::getPriority
 	 * @covers ::setPriority
+	 * @covers ::getPriorityName
+	 * @covers ::getPriorities
 	 * @group  Email
 	 */
 	public function testPriority()
 	{
-		$priority = Message::HIGHEST;
+		$priority = 'HIGHEST';
 
-		$this->assertSame($this->object, $this->object->setPriority($priority));
+		$this->assertSame($this->object, $this->object->setPriority(Message::HIGHEST));
 
 		$this->assertEquals($priority, $this->object->getPriority());
+
+		$this->assertTrue(array_key_exists($priority, $this->object->getPriorities()));
+	}
+
+	/**
+	 * @covers            ::getPriorityName
+	 * @expectedException InvalidArgumentException
+	 * @group             Email
+	 */
+	public function testInvalidPriority()
+	{
+		$this->object->getPriorityName(0);
 	}
 
 	/**
