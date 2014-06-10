@@ -8,9 +8,7 @@
  * @link      http://fuelphp.com
  */
 
-namespace Fuel\Email\Attachment;
-
-use Fuel\Email\AttachmentInterface;
+namespace Fuel\Email;
 
 /**
  * General attachment implementation
@@ -68,7 +66,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Returns attachment name
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
 	 */
 	public function getName()
 	{
@@ -76,7 +78,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Sets attachment name
+	 *
+	 * @return Attachment
+	 *
+	 * @since 2.0
 	 */
 	public function setName($name)
 	{
@@ -86,7 +92,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Returns content
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
 	 */
 	public function getContents()
 	{
@@ -94,7 +104,13 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Sets content
+	 *
+	 * @param string $contents
+	 *
+	 * @return Attachment
+	 *
+	 * @since 2.0
 	 */
 	public function setContents($contents)
 	{
@@ -104,7 +120,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Returns mime type
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
 	 */
 	public function getMime()
 	{
@@ -112,7 +132,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Sets mime type
+	 *
+	 * @return Attachment
+	 *
+	 * @since 2.0
 	 */
 	public function setMime($mime)
 	{
@@ -122,7 +146,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Checks whether attachment is inline or not
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
 	 */
 	public function isInline()
 	{
@@ -146,7 +174,11 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Returns Content ID
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
 	 */
 	public function getCid()
 	{
@@ -154,7 +186,13 @@ class Attachment implements AttachmentInterface
 	}
 
 	/**
-	 * {@inheritdocs}
+	 * Sets Content ID
+	 *
+	 * @param string $cid
+	 *
+	 * @return Attachment
+	 *
+	 * @since 2.0
 	 */
 	public function setCid($cid)
 	{

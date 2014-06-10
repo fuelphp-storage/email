@@ -8,17 +8,17 @@
  * @link      http://fuelphp.com
  */
 
-namespace Fuel\Email\Attachment;
+namespace Fuel\Email;
 
 /**
- * Tests for File attachment
+ * Tests for Attachment
  *
  * @package Fuel\Email
  * @author  Fuel Development Team
  *
- * @coversDefaultClass Fuel\Email\Attachment\Attachment
+ * @coversDefaultClass Fuel\Email\Attachment
  */
-class AttachmentTest extends AbstractAttachmentTest
+class AttachmentTest extends Attachment\AbstractAttachmentTest
 {
 	public function _before()
 	{

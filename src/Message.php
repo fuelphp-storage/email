@@ -96,7 +96,7 @@ class Message
 	/**
 	 * Attachments
 	 *
-	 * @var AttachmentInterface[]
+	 * @var Attachment[]
 	 */
 	protected $attachments = [];
 
@@ -345,13 +345,13 @@ class Message
 	/**
 	 * Adds an attachment
 	 *
-	 * @param  AttachmentInterface $attachment
+	 * @param  Attachment $attachment
 	 *
 	 * @return Message
 	 *
 	 * @since 2.0
 	 */
-	public function attach(AttachmentInterface $attachment)
+	public function attach(Attachment $attachment)
 	{
 		$this->attachments[] = $attachment;
 
@@ -361,7 +361,7 @@ class Message
 	/**
 	 * Returns the list of attachments
 	 *
-	 * @return AttachmentInterface[]
+	 * @return Attachment[]
 	 *
 	 * @since 2.0
 	 */

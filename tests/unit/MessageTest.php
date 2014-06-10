@@ -136,7 +136,7 @@ class MessageTest extends Test
 	 */
 	public function testAttachment()
 	{
-		$attachment = \Mockery::mock('Fuel\\Email\\AttachmentInterface');
+		$attachment = \Mockery::mock('Fuel\\Email\\Attachment');
 
 		$this->assertSame($this->object, $this->object->attach($attachment));
 

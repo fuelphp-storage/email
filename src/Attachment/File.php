@@ -10,6 +10,7 @@
 
 namespace Fuel\Email\Attachment;
 
+use Fuel\Email\Attachment;
 use Fuel\FileSystem\File as FileObject;
 use InvalidArgumentException;
 
