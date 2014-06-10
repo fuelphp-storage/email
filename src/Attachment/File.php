@@ -35,7 +35,7 @@ class File extends Attachment
 	{
 		if (($file->exists() and $contents = $file->getContents()) === false or empty($contents))
 		{
-			throw new InvalidArgumentException('The file does not exists, not readable or empty');
+			throw new InvalidArgumentException('EMA-006: The file does not exists, not readable or empty.');
 		}
 
 		if ($name === null)

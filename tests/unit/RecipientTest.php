@@ -66,7 +66,7 @@ class RecipientTest extends Test
 	 * @expectedException InvalidArgumentException
 	 * @group             Email
 	 */
-	public function testConstructBadType()
+	public function testConstructInvalidType()
 	{
 		new Recipient('', 'john@doe.com', 'John Doe');
 	}
