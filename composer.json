@@ -18,7 +18,11 @@
 	},
 	"require-dev": {
 		"codeception/codeception": "1.8",
-		"codeception/mockery-module": "dev-master"
+		"codeception/mockery-module": "dev-master",
+		"psr/log": "~1.0.0"
+	},
+	"suggest": {
+		"psr/log": "NoOp transport uses PSR Logger"
 	},
 	"autoload": {
 		"psr-4": { "Fuel\\Email\\": "src/" }
