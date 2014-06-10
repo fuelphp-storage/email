@@ -49,16 +49,21 @@ class MessageTest extends Test
 	/**
 	 * @covers ::addRecipient
 	 * @covers ::getRecipients
+	 * @covers ::getRecipientsOfType
 	 * @covers ::clearRecipients
 	 * @group  Email
 	 */
 	public function testRecipient()
 	{
 		$recipient = \Mockery::mock('Fuel\\Email\\Recipient');
+		$recipient->shouldReceive('isType')
+			->andReturn(true);
 
 		$this->assertSame($this->object, $this->object->addRecipient($recipient));
 
 		$this->assertEquals([$recipient], $this->object->getRecipients());
+
+		$this->assertEquals([$recipient], $this->object->getRecipientsOfType('to'));
 
 		$this->assertSame($this->object, $this->object->clearRecipients());
 

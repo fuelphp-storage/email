@@ -187,6 +187,22 @@ class Message
 	}
 
 	/**
+	 * Returns the list of recipients of one type
+	 *
+	 * @param string $type
+	 *
+	 * @return Recipient[]
+	 *
+	 * @since 2.0
+	 */
+	public function getRecipientsOfType($type)
+	{
+		return array_filter($this->recipients, function($recipient) use($type) {
+			return $recipient->isType($type);
+		});
+	}
+
+	/**
 	 * Clears the list of recipients
 	 *
 	 * @return Message
