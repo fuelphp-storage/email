@@ -252,20 +252,4 @@ class MessageTest extends Test
 	{
 		$this->object->setType('invalid');
 	}
-
-	/**
-	 * @covers ::getId
-	 * @group  Email
-	 */
-	public function testId()
-	{
-		$email = 'john@doe.com';
-		$from = \Mockery::mock('Fuel\\Email\\Address');
-		$from->shouldReceive('getEmail')
-			->andReturn($email);
-
-		$this->object->setFrom($from);
-
-		$this->assertRegExp('/<(?:.*)(?:@doe.com)>/', $this->object->getId());
-	}
 }
