@@ -18,7 +18,7 @@ namespace Fuel\Email;
  *
  * @since 2.0
  */
-class Attachment implements AttachmentInterface
+class Attachment
 {
 	/**
 	 * Attachment name
