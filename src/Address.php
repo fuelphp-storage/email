@@ -59,7 +59,7 @@ class Address
 	 *
 	 * @param string $email
 	 *
-	 * @return Address
+	 * @return this
 	 *
 	 * @throws InvalidArgumentException If $email is not a valid email address.
 	 *
@@ -92,7 +92,7 @@ class Address
 	/**
 	 * Sets the name
 	 *
-	 * @return string
+	 * @return this
 	 *
 	 * @since 2.0
 	 */

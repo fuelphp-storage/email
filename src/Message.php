@@ -147,7 +147,7 @@ class Message
 	 *
 	 * @param Address $from
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -163,7 +163,7 @@ class Message
 	 *
 	 * @param Recipient $recipient
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -205,7 +205,7 @@ class Message
 	/**
 	 * Clears the list of recipients
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -221,7 +221,7 @@ class Message
 	 *
 	 * @param Address $replyTo
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -247,7 +247,7 @@ class Message
 	/**
 	 * Clears Reply-To addresses
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -275,7 +275,7 @@ class Message
 	 *
 	 * @param string $subject
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -303,7 +303,7 @@ class Message
 	 *
 	 * @param string $body
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -319,7 +319,7 @@ class Message
 	 *
 	 * @param  string $body
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -347,7 +347,7 @@ class Message
 	 *
 	 * @param strint $altBody
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -363,7 +363,7 @@ class Message
 	 *
 	 * @param  Attachment $attachment
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -401,7 +401,7 @@ class Message
 	/**
 	 * Clears the list of attachments
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -429,7 +429,7 @@ class Message
 	 *
 	 * @param string $priority One of the priority constants of this class
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -477,7 +477,7 @@ class Message
 	 * @param string|[] $header
 	 * @param string    $value
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -518,7 +518,7 @@ class Message
 	/**
 	 * Clears the list of custom headers
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -550,7 +550,7 @@ class Message
 	 * @param string $key
 	 * @param mixed $value
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -578,7 +578,7 @@ class Message
 	 *
 	 * @param string $type
 	 *
-	 * @return Message
+	 * @return this
 	 *
 	 * @since 2.0
 	 */

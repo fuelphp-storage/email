@@ -80,7 +80,7 @@ class Attachment
 	/**
 	 * Sets attachment name
 	 *
-	 * @return Attachment
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -108,7 +108,7 @@ class Attachment
 	 *
 	 * @param string $contents
 	 *
-	 * @return Attachment
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -134,7 +134,7 @@ class Attachment
 	/**
 	 * Sets mime type
 	 *
-	 * @return Attachment
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -162,7 +162,7 @@ class Attachment
 	 *
 	 * @param boolean $inline
 	 *
-	 * @return Attachment
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
@@ -190,7 +190,7 @@ class Attachment
 	 *
 	 * @param string $cid
 	 *
-	 * @return Attachment
+	 * @return this
 	 *
 	 * @since 2.0
 	 */
