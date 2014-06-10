@@ -114,4 +114,16 @@ class Address
 	{
 		return isset($this->name);
 	}
+
+	/**
+	 * Returns email
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function __tostring()
+	{
+		return $this->getEmail();
+	}
 }

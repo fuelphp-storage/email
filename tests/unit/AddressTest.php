@@ -72,6 +72,15 @@ class AddressTest extends Test
 	}
 
 	/**
+	 * @covers ::__tostring
+	 * @group  Email
+	 */
+	public function testString()
+	{
+		$this->assertEquals($this->object->getEmail(), (string) $this->object);
+	}
+
+	/**
 	 * @covers ::__construct
 	 * @group  Email
 	 */
