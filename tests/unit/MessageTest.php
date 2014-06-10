@@ -99,6 +99,35 @@ class MessageTest extends Test
 	}
 
 	/**
+	 * @covers ::getBody
+	 * @covers ::setBody
+	 * @covers ::htmlBody
+	 * @covers ::getAltBody
+	 * @covers ::setAltBody
+	 * @group  Email
+	 */
+	public function testBody()
+	{
+		$body = 'body';
+
+		$this->assertSame($this->object, $this->object->setBody($body));
+
+		$this->assertEquals($body, $this->object->getBody());
+
+		$this->assertSame($this->object, $this->object->setAltBody($body));
+
+		$this->assertEquals($body, $this->object->getAltBody());
+
+		$this->assertEquals('plain', $this->object->getType());
+
+		$this->assertSame($this->object, $this->object->htmlBody($body));
+
+		$this->assertEquals($body, $this->object->getAltBody());
+
+		$this->assertEquals('html', $this->object->getType());
+	}
+
+	/**
 	 * @covers ::attach
 	 * @covers ::getAttachments
 	 * @covers ::clearAttachments
@@ -195,6 +224,28 @@ class MessageTest extends Test
 		$this->assertSame($this->object, $this->object->setMeta($key, $value));
 
 		$this->assertEquals($value, $this->object->getMeta($key));
+	}
+
+	/**
+	 * @covers ::getType
+	 * @covers ::setType
+	 * @group  Email
+	 */
+	public function testType()
+	{
+		$this->assertSame($this->object, $this->object->setType(Message::HTML));
+
+		$this->assertEquals(Message::HTML, $this->object->getType());
+	}
+
+	/**
+	 * @covers            ::setType
+	 * @expectedException InvalidArgumentException
+	 * @group             Email
+	 */
+	public function testInvalidType()
+	{
+		$this->object->setType('invalid');
 	}
 
 	/**

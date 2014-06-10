@@ -24,6 +24,12 @@ use InvalidArgumentException;
 class Message
 {
 	/**
+	 * Mail types
+	 */
+	const PLAIN = 'plain';
+	const HTML  = 'html';
+
+	/**
 	 * Email priorities
 	 */
 	const HIGHEST = 1;
@@ -32,6 +38,11 @@ class Message
 	const LOW     = 4;
 	const LOWEST  = 5;
 
+	/**
+	 * Email priorities
+	 *
+	 * @var []
+	 */
 	protected static $priorities = [
 		1 => 'HIGHEST',
 		2 => 'HIGH',
@@ -69,6 +80,20 @@ class Message
 	protected $subject;
 
 	/**
+	 * Mail body
+	 *
+	 * @var string
+	 */
+	protected $body;
+
+	/**
+	 * Mail alternative body
+	 *
+	 * @var string
+	 */
+	protected $altBody;
+
+	/**
 	 * Attachments
 	 *
 	 * @var AttachmentInterface[]
@@ -95,6 +120,15 @@ class Message
 	 * @var []
 	 */
 	protected $metaContainer = [];
+
+	/**
+	 * Type of mail
+	 *
+	 * Can be one of type constants
+	 *
+	 * @var string
+	 */
+	protected $type = 'plain';
 
 	/**
 	 * Returns From address
@@ -231,7 +265,79 @@ class Message
 	 */
 	public function setSubject($subject)
 	{
-		$this->subject = $subject;
+		$this->subject = (string) $subject;
+
+		return $this;
+	}
+
+	/**
+	 * Returns body
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getBody()
+	{
+		return $this->body;
+	}
+
+	/**
+	 * Sets body
+	 *
+	 * @param string $body
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setBody($body)
+	{
+		$this->body = (string) $body;
+
+		return $this;
+	}
+
+	/**
+	 * Sets HTML body
+	 *
+	 * @param  string $body
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function htmlBody($body)
+	{
+		$this->setType(static::HTML);
+
+		return $this->setBody($body);
+	}
+
+	/**
+	 * Get alternative body
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getAltBody()
+	{
+		return $this->altBody;
+	}
+
+	/**
+	 * Sets alternative body
+	 *
+	 * @param strint $altBody
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setAltBody($altBody)
+	{
+		$this->altBody = (string) $altBody;
 
 		return $this;
 	}
@@ -435,6 +541,39 @@ class Message
 	public function setMeta($key, $value = null)
 	{
 		Arr::set($this->metaContainer, $key, $value);
+
+		return $this;
+	}
+
+	/**
+	 * Returns message type
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
+	 * Sets message type
+	 *
+	 * @param string $type
+	 *
+	 * @return Message
+	 *
+	 * @since 2.0
+	 */
+	public function setType($type)
+	{
+		if (in_array($type, array('plain', 'html')) === false)
+		{
+			throw new InvalidArgumentException('EMA-005: This is not a valid message type.');
+		}
+
+		$this->type = $type;
 
 		return $this;
 	}
