@@ -114,23 +114,4 @@ class Address
 	{
 		return isset($this->name);
 	}
-
-	/**
-	 * Returns a formatted address
-	 *
-	 * @return string
-	 *
-	 * @since 2.0
-	 */
-	public function __tostring()
-	{
-		$string = $this->email;
-
-		if (isset($this->name))
-		{
-			$string = '"'.$this->name.'" <'.$string.'>';
-		}
-
-		return $string;
-	}
 }

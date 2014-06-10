@@ -72,19 +72,6 @@ class AddressTest extends Test
 	}
 
 	/**
-	 * @covers ::__tostring
-	 * @group  Email
-	 */
-	public function testString()
-	{
-		$this->assertEquals('john@doe.com', (string) $this->object);
-
-		$this->object->setName('John Doe');
-
-		$this->assertEquals('"John Doe" <john@doe.com>', (string) $this->object);
-	}
-
-	/**
 	 * @covers ::__construct
 	 * @group  Email
 	 */
