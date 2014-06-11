@@ -12,6 +12,7 @@ namespace Fuel\Email\Transport\Smtp;
 
 use Fuel\Email\Transport\Smtp\Command;
 use Codeception\TestCase\Test;
+use RuntimeException;
 
 /**
  * Tests for SMTP Connection
@@ -31,12 +32,19 @@ class ConnectionTest extends Test
 	public function _before()
 	{
 		$this->object = new DummyConnection();
-		$this->object->open('tcp', 'smtp.gmail.com', 587);
+		try
+		{
+			$this->object->open('tcp', 'smtp.gmail.com', 587);
+		}
+		catch (RuntimeException $e)
+		{
+			$this->markTestSkipped('Connection not available.');
+		}
 	}
 
 	public function _after()
 	{
-		// $this->object->close();
+		$this->object->close();
 	}
 
 	/**
