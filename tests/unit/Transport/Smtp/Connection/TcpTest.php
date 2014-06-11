@@ -11,6 +11,7 @@
 namespace Fuel\Email\Transport\Smtp\Connection;
 
 use Codeception\TestCase\Test;
+use RuntimeException;
 
 /**
  * Tests for TCP Connection
@@ -31,12 +32,12 @@ class TcpTest extends Test
 		try
 		{
 			$tcp = new Tcp('smtp.gmail.com', 587);
+
+			$tcp->isState(Tcp::ESTABILISHED);
 		}
 		catch (RuntimeException $e)
 		{
 			$this->markTestSkipped('TCP connection not available.');
 		}
-
-		$tcp->isState(Tcp::ESTABILISHED);
 	}
 }

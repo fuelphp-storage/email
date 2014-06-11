@@ -11,6 +11,7 @@
 namespace Fuel\Email\Transport\Smtp\Connection;
 
 use Codeception\TestCase\Test;
+use RuntimeException;
 
 /**
  * Tests for SSL Connection
@@ -31,12 +32,12 @@ class SslTest extends Test
 		try
 		{
 			$ssl = new Ssl('smtp.gmail.com', 465);
+
+			$ssl->isState(Ssl::ESTABILISHED);
 		}
 		catch (RuntimeException $e)
 		{
 			$this->markTestSkipped('SSL connection not available.');
 		}
-
-		$ssl->isState(Ssl::ESTABILISHED);
 	}
 }

@@ -32,12 +32,12 @@ class TlsTest extends Test
 		try
 		{
 			$tls = new Tls('smtp.gmail.com', 587);
+
+			$tls->isState(Tls::ESTABILISHED);
 		}
 		catch (RuntimeException $e)
 		{
 			$this->markTestSkipped('TLS connection not available.');
 		}
-
-		$tls->isState(Tls::ESTABILISHED);
 	}
 }
