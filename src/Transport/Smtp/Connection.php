@@ -101,8 +101,8 @@ abstract class Connection
 		$errno = 0;
 		$errstr = null;
 
-		$remote = sprintf("%s://%s:%d", $protocol, gethostbyname($hostname), $port);
-		$stream = @stream_socket_client($remote, $errno, $errstr, $timeout);
+		$path = sprintf("%s://%s:%d", $protocol, gethostbyname($hostname), $port);
+		$stream = @stream_socket_client($path, $errno, $errstr, $timeout);
 
 		if ($stream === false)
 		{
@@ -113,8 +113,9 @@ abstract class Connection
 		$this->changeState(static::ESTABILISHED);
 
 		$greeting = $this->read();
+		$code = $greeting->getCode();
 
-		if (($code = $greeting->getCode()) !== 220)
+		if ($code !== 220)
 		{
 			throw new RuntimeException('Invalid greeting recieved.', $code);
 		}
@@ -166,7 +167,7 @@ abstract class Connection
 
 		if ($authentication->authenticate($this) === false)
 		{
-			throw new RuntimeException('Cannot authenticate.');
+			throw new RuntimeException('Authentication failed.');
 		}
 
 		$this->changeState(static::CONNECTED);
