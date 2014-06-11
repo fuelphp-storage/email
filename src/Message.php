@@ -115,13 +115,6 @@ class Message
 	protected $headers = [];
 
 	/**
-	 * Used to contain any meta information to associate with this message
-	 *
-	 * @var []
-	 */
-	protected $metaContainer = [];
-
-	/**
 	 * Type of mail
 	 *
 	 * Can be one of type constants
@@ -525,38 +518,6 @@ class Message
 	public function clearHeaders()
 	{
 		$this->headers = [];
-
-		return $this;
-	}
-
-	/**
-	 * Returns meta data
-	 *
-	 * @param  string $key
-	 * @param  mixed $default
-	 *
-	 * @return mixed
-	 *
-	 * @since 2.0
-	 */
-	public function getMeta($key, $default = null)
-	{
-		return Arr::get($this->metaContainer, $key, $default);
-	}
-
-	/**
-	 * Sets meta data
-	 *
-	 * @param string $key
-	 * @param mixed $value
-	 *
-	 * @return this
-	 *
-	 * @since 2.0
-	 */
-	public function setMeta($key, $value = null)
-	{
-		Arr::set($this->metaContainer, $key, $value);
 
 		return $this;
 	}
