@@ -57,6 +57,7 @@ class DataTest extends AbstractCommandTest
 
 	/**
 	 * @covers            ::execute
+	 * @covers            ::escapePeriod
 	 * @expectedException RuntimeException
 	 * @group             Email
 	 */
