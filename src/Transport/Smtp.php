@@ -163,11 +163,25 @@ class Smtp extends Transport
 		}
 	}
 
+	/**
+	 * Write data to Client stream
+	 *
+	 * @param  string $data
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
 	public function write($data)
 	{
 		return $this->client->write($data, $this->config['newline']);
 	}
 
+	/**
+	 * Returns Client stream
+	 *
+	 * @return resource
+	 */
 	public function getStream()
 	{
 		return $this->client->getStream();
