@@ -1,4 +1,6 @@
-language: php
+language:
+  - php
+  - ruby
 
 php:
   - 5.4
