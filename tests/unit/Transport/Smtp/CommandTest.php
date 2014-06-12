@@ -45,14 +45,11 @@ class CommandTest extends Test
 
 	/**
 	 * @covers ::__construct
-	 * @covers ::invoke
 	 * @group  Email
 	 */
 	public function testConstruct()
 	{
 		$command = \Mockery::mock('Fuel\\Email\\Transport\\Smtp\\Command');
 		$command->shouldReceive('execute');
-
-		$this->assertNull(Command::invoke($command));
 	}
 }

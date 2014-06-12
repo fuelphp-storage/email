@@ -40,16 +40,4 @@ abstract class Command
 	 * @since 2.0
 	 */
 	abstract public function execute();
-
-	/**
-	 * Easily invoke a command
-	 *
-	 * @param Command $command
-	 *
-	 * @since 2.0
-	 */
-	public static function invoke(Command $command)
-	{
-		$command->execute();
-	}
 }

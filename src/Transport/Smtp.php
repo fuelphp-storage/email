@@ -96,7 +96,7 @@ class Smtp extends Transport
 
 		if ($this->config['smtp']['starttls'] === true)
 		{
-			Command::invoke(new Command\Starttls($this));
+			$this->invoke(new Command\Starttls($this));
 
 			$this->sayHello();
 		}
@@ -136,8 +136,8 @@ class Smtp extends Transport
 	 */
 	public function sayHello()
 	{
-		Command::invoke(new Command\Ehlo($this));
-		Command::invoke(new Command\Helo($this));
+		$this->invoke(new Command\Ehlo($this));
+		$this->invoke(new Command\Helo($this));
 	}
 
 	/**
@@ -209,5 +209,17 @@ class Smtp extends Transport
 	public function getResponses()
 	{
 		return $this->responses;
+	}
+
+	/**
+	 * Easily invoke a command
+	 *
+	 * @param Command $command
+	 *
+	 * @since 2.0
+	 */
+	public function invoke(Command $command)
+	{
+		$command->execute();
 	}
 }
