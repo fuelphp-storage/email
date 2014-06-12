@@ -19,6 +19,8 @@ use Fuel\Email\Transport\Smtp\Connection;
  * @author  Fuel Development Team
  *
  * @since 2.0
+ *
+ * @codeCoverageIgnore
  */
 class Ssl extends Connection
 {

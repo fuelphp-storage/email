@@ -34,7 +34,7 @@ class ConnectionTest extends Test
 		$this->object = new DummyConnection();
 		try
 		{
-			$this->object->open('tcp', 'smtp.gmail.com', 587);
+			$this->object->open('tcp', '127.0.0.1', 1025);
 		}
 		catch (RuntimeException $e)
 		{
@@ -55,7 +55,7 @@ class ConnectionTest extends Test
 	public function testOpen()
 	{
 		$object = new DummyConnection();
-		$this->assertTrue($object->open('tcp', 'smtp.gmail.com', 587));
+		$this->assertTrue($object->open('tcp', '127.0.0.1', 1025));
 		$this->assertTrue($object->isState(Connection::ESTABILISHED));
 	}
 
@@ -67,7 +67,7 @@ class ConnectionTest extends Test
 	public function testOpenInvalidTimeout()
 	{
 		$object = new DummyConnection();
-		$object->open('tcp', 'smtp.gmail.com', 587, 'INVALID');
+		$object->open('tcp', '127.0.0.1', 1025, 'INVALID');
 	}
 
 	/**
@@ -77,7 +77,7 @@ class ConnectionTest extends Test
 	 */
 	public function testOpenAlreadyOpened()
 	{
-		$this->object->open('tcp', 'smtp.gmail.com', 587);
+		$this->object->open('tcp', '127.0.0.1', 1025);
 	}
 
 	/**
@@ -88,7 +88,7 @@ class ConnectionTest extends Test
 	public function testOpenInvalidStream()
 	{
 		$object = new DummyConnection();
-		$object->open('tcp', 'smtpa.gmail.com', 587);
+		$object->open('tcp', 'localhosta', 1025);
 	}
 
 	/**
@@ -165,7 +165,7 @@ class ConnectionTest extends Test
 	 */
 	public function testHostname()
 	{
-		$this->assertEquals('smtp.gmail.com', $this->object->getHostname());
+		$this->assertEquals('127.0.0.1', $this->object->getHostname());
 	}
 
 	/**

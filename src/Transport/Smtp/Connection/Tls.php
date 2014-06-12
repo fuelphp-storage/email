@@ -22,6 +22,8 @@ use Fuel\Email\Transport\Smtp\Command\Helo;
  * @author  Fuel Development Team
  *
  * @since 2.0
+ *
+ * @codeCoverageIgnore
  */
 class Tls extends Tcp
 {

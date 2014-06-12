@@ -31,7 +31,7 @@ class TcpTest extends Test
 	{
 		try
 		{
-			$tcp = new Tcp('smtp.gmail.com', 587);
+			$tcp = new Tcp('127.0.0.1', 1025);
 
 			$tcp->isState(Tcp::ESTABILISHED);
 		}
