@@ -31,12 +31,12 @@ class Login extends Authentication
 	 */
 	public function authenticate(Smtp $smtp)
 	{
-		Command::invoke(new Auth($smtp, "LOGIN"));
-		Command::invoke(new Input($smtp, base64_encode($this->username)));
+		$smtp->invoke(new Auth($smtp, "LOGIN"));
+		$smtp->invoke(new Input($smtp, base64_encode($this->username)));
 
 		if ($smtp->read()->getCode() === Authentication::ACCEPTED)
 		{
-			Command::invoke(new Input($smtp, base64_encode($this->password)));
+			$smtp->invoke(new Input($smtp, base64_encode($this->password)));
 
 			return $smtp->read()->getCode() === Authentication::AUTHENTICATION_PERFORMED;
 		}

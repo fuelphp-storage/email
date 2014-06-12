@@ -45,6 +45,11 @@ class LoginTest extends Test
 		$mock->shouldReceive('write')
 			->andReturn(true);
 
+		$mock->shouldReceive('invoke')
+			->andReturnUsing(function($command) {
+				$command->execute();
+			});
+
 		$mock->shouldReceive('read')
 			->andReturn(
 				new Response(Authentication::ACCEPTED),

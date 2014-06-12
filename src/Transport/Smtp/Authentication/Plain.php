@@ -31,8 +31,8 @@ class Plain extends Authentication
 	 */
 	public function authenticate(Smtp $smtp)
 	{
-		Command::invoke(new Auth($smtp, "PLAIN"));
-		Command::invoke(
+		$smtp->invoke(new Auth($smtp, "PLAIN"));
+		$smtp->invoke(
 			new Input(
 				$smtp,
 				base64_encode(sprintf("\0%s\0%s", $this->username, $this->password))

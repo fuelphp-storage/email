@@ -68,6 +68,11 @@ class AuthenticationTest extends Test
 	{
 		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp');
 
+		$mock->shouldReceive('invoke')
+			->andReturnUsing(function($command) {
+				$command->execute();
+			});
+
 		$this->assertTrue($this->object->authenticate($mock));
 	}
 
