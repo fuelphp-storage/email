@@ -30,7 +30,7 @@ class Starttls extends Simple
 	{
 		if ($this->perform('STARTTLS', 220))
 		{
-			if (@stream_socket_enable_crypto($this->connection->getStream(), true, STREAM_CRYPTO_METHOD_TLS_CLIENT) === false)
+			if (@stream_socket_enable_crypto($this->smtp->getStream(), true, STREAM_CRYPTO_METHOD_TLS_CLIENT) === false)
 			{
 				throw new RuntimeException('Cannot encrypt the connection.');
 			}

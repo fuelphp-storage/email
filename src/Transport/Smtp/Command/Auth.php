@@ -11,8 +11,8 @@
 namespace Fuel\Email\Transport\Smtp\Command;
 
 use Fuel\Email\Transport\Smtp\Command;
-use Fuel\Email\Transport\Smtp\Connection;
 use Fuel\Email\Transport\Smtp\Authentication;
+use Fuel\Email\Transport\Smtp;
 use LogicException;
 use RuntimeException;
 
@@ -33,9 +33,9 @@ class Auth extends Command
 	 */
 	protected $mechanism;
 
-	public function __construct(Connection $connection, $mechanism)
+	public function __construct(Smtp $smtp, $mechanism)
 	{
-		parent::__construct($connection);
+		parent::__construct($smtp);
 
 		$this->mechanism = $mechanism;
 	}
@@ -45,9 +45,9 @@ class Auth extends Command
 	 */
 	public function execute()
 	{
-		if ($this->connection->write('AUTH '.$this->mechanism))
+		if ($this->smtp->write('AUTH '.$this->mechanism))
 		{
-			$response = $this->connection->read();
+			$response = $this->smtp->read();
 			$code = $response->getCode();
 
 			if ($code === Authentication::ALREADY_AUTHENTICATED)

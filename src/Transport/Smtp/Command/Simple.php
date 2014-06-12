@@ -65,9 +65,9 @@ abstract class Simple extends Command
 	 */
 	protected function perform($command, $code)
 	{
-		if ($this->connection->write($command))
+		if ($this->smtp->write($command))
 		{
-			$response = $this->connection->read();
+			$response = $this->smtp->read();
 			$respCode = $response->getCode();
 
 			if ($respCode !== $code)

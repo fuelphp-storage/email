@@ -10,6 +10,8 @@
 
 namespace Fuel\Email\Transport\Smtp;
 
+use Fuel\Email\Transport\Smtp;
+
 /**
  * Defines a general class for commands
  *
@@ -21,15 +23,15 @@ namespace Fuel\Email\Transport\Smtp;
 abstract class Command
 {
 	/**
-	 * Connection with the server
+	 * SMTP Transport protocol
 	 *
-	 * @var Connection
+	 * @var Smtp
 	 */
-	protected $connection;
+	protected $smtp;
 
-	public function __construct(Connection $connection)
+	public function __construct(Smtp $smtp)
 	{
-		$this->connection = $connection;
+		$this->smtp = $smtp;
 	}
 
 	/**

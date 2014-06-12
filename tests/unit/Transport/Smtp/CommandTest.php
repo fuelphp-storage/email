@@ -29,9 +29,9 @@ class CommandTest extends Test
 
 	public function _before()
 	{
-		$connection = \Mockery::mock('Fuel\\Email\\Transport\\Smtp\\Connection');
+		$smtp = \Mockery::mock('Fuel\\Email\\Transport\\Smtp');
 
-		$this->object = new DummyCommand($connection);
+		$this->object = new DummyCommand($smtp);
 	}
 
 	/**

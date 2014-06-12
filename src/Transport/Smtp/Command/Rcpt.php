@@ -10,7 +10,7 @@
 
 namespace Fuel\Email\Transport\Smtp\Command;
 
-use Fuel\Email\Transport\Smtp\Connection;
+use Fuel\Email\Transport\Smtp;
 
 /**
  * RCPT TO command
@@ -33,9 +33,9 @@ class Rcpt extends Simple
 	 */
 	protected $recipient;
 
-	public function __construct(Connection $connection, $recipient)
+	public function __construct(Smtp $smtp, $recipient)
 	{
-		parent::__construct($connection);
+		parent::__construct($smtp);
 
 		$this->recipient = $recipient;
 	}

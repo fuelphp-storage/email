@@ -10,6 +10,8 @@
 
 namespace Fuel\Email\Transport\Smtp;
 
+use Fuel\Email\Transport\Smtp;
+
 /**
  * Dummy authentication class
  *
@@ -25,7 +27,7 @@ class DummyAuthentication extends Authentication
 	/**
 	 * {@inheritdocs}
 	 */
-	public function authenticate(Connection $connection)
+	public function authenticate(Smtp $smtp)
 	{
 		return $this->return;
 	}

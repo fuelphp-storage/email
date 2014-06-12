@@ -10,6 +10,8 @@
 
 namespace Fuel\Email\Transport\Smtp;
 
+use Fuel\Email\Transport\Smtp;
+
 /**
  * Defines a general class for authentication
  *
@@ -59,6 +61,14 @@ abstract class Authentication
 	 */
 	protected $password;
 
+	/**
+	 * Creates a new authentication
+	 *
+	 * @param string $username
+	 * @param string $password
+	 *
+	 * @since 2.0
+	 */
 	public function __construct($username, $password)
 	{
 		$this->username = $username;
@@ -122,13 +132,13 @@ abstract class Authentication
 	}
 
 	/**
-	 * Perform authentication on connection
+	 * Performs authentication on connection
 	 *
-	 * @param  Connection $connection
+	 * @param Smtp $smtp
 	 *
 	 * @return boolean
 	 *
 	 * @since 2.0
 	 */
-	abstract public function authenticate(Connection $connection);
+	abstract public function authenticate(Smtp $smtp);
 }

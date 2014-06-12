@@ -10,7 +10,7 @@
 
 namespace Fuel\Email\Transport\Smtp\Command;
 
-use Fuel\Email\Transport\Smtp\Connection;
+use Fuel\Email\Transport\Smtp;
 
 /**
  * MAIL FROM command
@@ -33,9 +33,9 @@ class Mail extends Simple
 	 */
 	protected $from;
 
-	public function __construct(Connection $connection, $from)
+	public function __construct(Smtp $smtp, $from)
 	{
-		parent::__construct($connection);
+		parent::__construct($smtp);
 
 		$this->from = $from;
 	}

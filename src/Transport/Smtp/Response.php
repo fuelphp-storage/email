@@ -84,6 +84,13 @@ class Response
 		return substr($this->getResponse(), 4);
 	}
 
+	/**
+	 * Returns the response
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
 	public function __tostring()
 	{
 		return $this->getResponse();

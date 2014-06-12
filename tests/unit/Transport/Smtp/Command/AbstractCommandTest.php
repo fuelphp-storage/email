@@ -28,10 +28,15 @@ abstract class AbstractCommandTest extends Test
 
 	protected function createMock()
 	{
-		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp\\Connection');
+		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp');
 
 		$mock->shouldReceive('write')
 			->andReturn(true)
+			->byDefault();
+
+		$mock->shouldReceive('getConfig')
+			->with('newline')
+			->andReturn("\r\n")
 			->byDefault();
 
 		return $mock;

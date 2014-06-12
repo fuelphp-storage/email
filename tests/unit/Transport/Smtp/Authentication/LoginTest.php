@@ -40,7 +40,7 @@ class LoginTest extends Test
 	 */
 	public function testAuthenticate()
 	{
-		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp\\Connection');
+		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp');
 
 		$mock->shouldReceive('write')
 			->andReturn(true);

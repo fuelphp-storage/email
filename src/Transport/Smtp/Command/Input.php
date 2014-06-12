@@ -11,7 +11,7 @@
 namespace Fuel\Email\Transport\Smtp\Command;
 
 use Fuel\Email\Transport\Smtp\Command;
-use Fuel\Email\Transport\Smtp\Connection;
+use Fuel\Email\Transport\Smtp;
 
 /**
  * Input command
@@ -30,9 +30,9 @@ class Input extends Command
 	 */
 	protected $command;
 
-	public function __construct(Connection $connection, $command)
+	public function __construct(Smtp $smtp, $command)
 	{
-		parent::__construct($connection);
+		parent::__construct($smtp);
 
 		$this->command = $command;
 	}
@@ -42,6 +42,6 @@ class Input extends Command
 	 */
 	public function execute()
 	{
-		$this->connection->write($this->command);
+		$this->smtp->write($this->command);
 	}
 }

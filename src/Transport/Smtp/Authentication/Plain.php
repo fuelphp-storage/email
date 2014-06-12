@@ -11,10 +11,10 @@
 namespace Fuel\Email\Transport\Smtp\Authentication;
 
 use Fuel\Email\Transport\Smtp\Authentication;
-use Fuel\Email\Transport\Smtp\Connection;
 use Fuel\Email\Transport\Smtp\Command;
 use Fuel\Email\Transport\Smtp\Command\Auth;
 use Fuel\Email\Transport\Smtp\Command\Input;
+use Fuel\Email\Transport\Smtp;
 
 /**
  * PLAIN mechanism authentication
@@ -29,16 +29,16 @@ class Plain extends Authentication
 	/**
 	 * {@inheritdocs}
 	 */
-	public function authenticate(Connection $connection)
+	public function authenticate(Smtp $smtp)
 	{
-		Command::invoke(new Auth($connection, "PLAIN"));
+		Command::invoke(new Auth($smtp, "PLAIN"));
 		Command::invoke(
 			new Input(
-				$connection,
+				$smtp,
 				base64_encode(sprintf("\0%s\0%s", $this->username, $this->password))
 			)
 		);
 
-		return $connection->read()->getCode() === Authentication::AUTHENTICATION_PERFORMED;
+		return $smtp->read()->getCode() === Authentication::AUTHENTICATION_PERFORMED;
 	}
 }

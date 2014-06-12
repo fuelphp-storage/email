@@ -28,6 +28,18 @@ class TransportTest extends Transport\AbstractTransportTest
 	}
 
 	/**
+	 * @covers ::getConfig
+	 * @covers ::setConfig
+	 * @group  Email
+	 */
+	public function testConfig()
+	{
+		$this->assertSame($this->object, $this->object->setConfig('test', 'test'));
+
+		$this->assertEquals('test', $this->object->getConfig('test'));
+	}
+
+	/**
 	 * @covers ::getMessageId
 	 * @group  Email
 	 */
@@ -47,6 +59,6 @@ class TransportTest extends Transport\AbstractTransportTest
 	 */
 	public function testConstruct()
 	{
-		$this->object = new DummyTransport($mock);
+		$this->object = new DummyTransport;
 	}
 }

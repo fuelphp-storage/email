@@ -11,7 +11,7 @@
 namespace Fuel\Email\Transport\Smtp\Command;
 
 use Fuel\Email\Transport\Smtp\Command;
-use Fuel\Email\Transport\Smtp\Connection;
+use Fuel\Email\Transport\Smtp;
 use RuntimeException;
 
 /**
@@ -26,13 +26,13 @@ class Data extends Command
 {
 	protected $data;
 
-	public function __construct(Connection $connection, $data)
+	public function __construct(Smtp $smtp, $data)
 	{
-		parent::__construct($connection);
+		parent::__construct($smtp);
 
 		if (is_string($data))
 		{
-			$data = explode(Connection::EOL, $data);
+			$data = explode($smtp->getConfig('newline'), $data);
 		}
 
 		$this->data = $data;
@@ -43,9 +43,9 @@ class Data extends Command
 	 */
 	public function execute()
 	{
-		if ($this->connection->write('DATA'))
+		if ($this->smtp->write('DATA'))
 		{
-			$response = $this->connection->read();
+			$response = $this->smtp->read();
 			$code = $response->getCode();
 
 			if ($code !== 354)
@@ -57,12 +57,12 @@ class Data extends Command
 			{
 				$line = $this->escapePeriod($line);
 
-				$this->connection->write($line);
+				$this->smtp->write($line);
 			}
 
-			$this->connection->write('.');
+			$this->smtp->write('.');
 
-			$response = $this->connection->read();
+			$response = $this->smtp->read();
 			$code = $response->getCode();
 
 			if ($code !== 250)

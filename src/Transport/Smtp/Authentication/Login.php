@@ -11,10 +11,10 @@
 namespace Fuel\Email\Transport\Smtp\Authentication;
 
 use Fuel\Email\Transport\Smtp\Authentication;
-use Fuel\Email\Transport\Smtp\Connection;
 use Fuel\Email\Transport\Smtp\Command;
 use Fuel\Email\Transport\Smtp\Command\Auth;
 use Fuel\Email\Transport\Smtp\Command\Input;
+use Fuel\Email\Transport\Smtp;
 
 /**
  * LOGIN mechanism authentication
@@ -29,16 +29,16 @@ class Login extends Authentication
 	/**
 	 * {@inheritdocs}
 	 */
-	public function authenticate(Connection $connection)
+	public function authenticate(Smtp $smtp)
 	{
-		Command::invoke(new Auth($connection, "LOGIN"));
-		Command::invoke(new Input($connection, base64_encode($this->username)));
+		Command::invoke(new Auth($smtp, "LOGIN"));
+		Command::invoke(new Input($smtp, base64_encode($this->username)));
 
-		if ($connection->read()->getCode() === Authentication::ACCEPTED)
+		if ($smtp->read()->getCode() === Authentication::ACCEPTED)
 		{
-			Command::invoke(new Input($connection, base64_encode($this->password)));
+			Command::invoke(new Input($smtp, base64_encode($this->password)));
 
-			return $connection->read()->getCode() === Authentication::AUTHENTICATION_PERFORMED;
+			return $smtp->read()->getCode() === Authentication::AUTHENTICATION_PERFORMED;
 		}
 
 		return false;

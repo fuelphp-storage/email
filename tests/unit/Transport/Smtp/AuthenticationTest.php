@@ -66,9 +66,9 @@ class AuthenticationTest extends Test
 	 */
 	public function testAuthenticate()
 	{
-		$connection = \Mockery::mock('Fuel\\Email\\Transport\\Smtp\\Connection');
+		$mock = \Mockery::mock('Fuel\\Email\\Transport\\Smtp');
 
-		$this->assertTrue($this->object->authenticate($connection));
+		$this->assertTrue($this->object->authenticate($mock));
 	}
 
 	/**

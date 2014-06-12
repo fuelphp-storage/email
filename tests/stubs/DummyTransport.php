@@ -21,7 +21,7 @@ use Fuel\Email\Transport;
  *
  * @since 2.0
  */
-class Dummy extends Transport
+class DummyTransport extends Transport
 {
 	/**
 	 * {@inheritdocs}

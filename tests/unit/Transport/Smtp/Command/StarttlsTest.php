@@ -49,22 +49,6 @@ class StarttlsTest extends AbstractCommandTest
 
 	/**
 	 * @covers ::execute
-	 * @group  Email
-	 */
-	public function testExecuteTls()
-	{
-		try
-		{
-			$tls = new Tls('smtp.gmail.com', 587);
-		}
-		catch (RuntimeException $e)
-		{
-			$this->markTestSkipped('TLS connection not available.');
-		}
-	}
-
-	/**
-	 * @covers ::execute
 	 * @covers ::perform
 	 * @group  Email
 	 */
