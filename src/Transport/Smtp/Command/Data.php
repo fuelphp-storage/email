@@ -55,10 +55,7 @@ class Data extends Command
 
 			foreach ($this->data as $line)
 			{
-				if(substr($line, 0, 1) === '.')
-				{
-					$line = '.'.$line;
-				}
+				$line = $this->escapePeriod($line);
 
 				$this->connection->write($line);
 			}
@@ -73,5 +70,26 @@ class Data extends Command
 				throw new RuntimeException('Cannot send message.', $code);
 			}
 		}
+	}
+
+	/**
+	 * Escape line starting period
+	 *
+	 * @param  string $line
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 *
+	 * @link http://tools.ietf.org/html/rfc5321#section-4.5.2
+	 */
+	protected function escapePeriod($line)
+	{
+		if(substr($line, 0, 1) === '.')
+		{
+			$line = '.'.$line;
+		}
+
+		return $line;
 	}
 }
