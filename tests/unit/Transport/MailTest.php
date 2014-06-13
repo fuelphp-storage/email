@@ -22,15 +22,6 @@ class MailTest extends AbstractTransportTest
 {
 	public function _before()
 	{
-		$this->object = new Mail;
-	}
-
-	/**
-	 * @covers ::__construct
-	 * @group  Email
-	 */
-	public function testConstruct()
-	{
-		$this->object = new Mail;
+		$this->object = new Mail($this->getConfig());
 	}
 }

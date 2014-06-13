@@ -24,7 +24,7 @@ class NoopTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Psr\\Log\\LoggerInterface');
 
-		$this->object = new Noop($mock);
+		$this->object = new Noop($mock, $this->getConfig());
 	}
 
 	/**
@@ -35,6 +35,6 @@ class NoopTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Psr\\Log\\LoggerInterface');
 
-		$this->object = new Noop($mock);
+		$this->object = new Noop($mock, $this->getConfig());
 	}
 }

@@ -24,7 +24,7 @@ class MailgunTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Mailgun\\Mailgun');
 
-		$this->object = new Mailgun($mock);
+		$this->object = new Mailgun($mock, $this->getConfig());
 	}
 
 	/**
@@ -42,6 +42,7 @@ class MailgunTest extends AbstractTransportTest
 
 	/**
 	 * @covers ::__construct
+	 * @covers ::configDefaults
 	 * @covers ::getMailgun
 	 * @group  Email
 	 */
@@ -49,7 +50,7 @@ class MailgunTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Mailgun\\Mailgun');
 
-		$object = new Mailgun($mock);
+		$object = new Mailgun($mock, $this->getConfig());
 
 		$this->assertSame($mock, $object->getMailgun());
 	}

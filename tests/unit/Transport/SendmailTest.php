@@ -22,15 +22,16 @@ class SendmailTest extends AbstractTransportTest
 {
 	public function _before()
 	{
-		$this->object = new Sendmail;
+		$this->object = new Sendmail($this->getConfig());
 	}
 
 	/**
 	 * @covers ::__construct
+	 * @covers ::configDefaults
 	 * @group  Email
 	 */
 	public function testConstruct()
 	{
-		$this->object = new Sendmail;
+		$this->object = new Sendmail($this->getConfig());
 	}
 }

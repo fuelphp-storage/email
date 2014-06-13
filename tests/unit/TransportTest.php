@@ -22,21 +22,22 @@ use Fuel\Email\Transport\DummyTransport;
  */
 class TransportTest extends Transport\AbstractTransportTest
 {
+	protected $config;
+
 	public function _before()
 	{
-		$this->object = new DummyTransport;
+		$this->config = $this->getConfig();
+
+		$this->object = new DummyTransport($this->config);
 	}
 
 	/**
 	 * @covers ::getConfig
-	 * @covers ::setConfig
 	 * @group  Email
 	 */
 	public function testConfig()
 	{
-		$this->assertSame($this->object, $this->object->setConfig('test', 'test'));
-
-		$this->assertEquals('test', $this->object->getConfig('test'));
+		$this->assertSame($this->config, $this->object->getConfig());
 	}
 
 	/**
@@ -59,6 +60,6 @@ class TransportTest extends Transport\AbstractTransportTest
 	 */
 	public function testConstruct()
 	{
-		$this->object = new DummyTransport;
+		$this->object = new DummyTransport($this->getConfig());
 	}
 }

@@ -24,7 +24,7 @@ class MandrillTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Mandrill');
 
-		$this->object = new Mandrill($mock);
+		$this->object = new Mandrill($mock, $this->getConfig());
 	}
 
 	/**
@@ -42,6 +42,7 @@ class MandrillTest extends AbstractTransportTest
 
 	/**
 	 * @covers ::__construct
+	 * @covers ::configDefaults
 	 * @covers ::getMandrill
 	 * @group  Email
 	 */
@@ -49,7 +50,7 @@ class MandrillTest extends AbstractTransportTest
 	{
 		$mock = \Mockery::mock('Mandrill');
 
-		$object = new Mandrill($mock);
+		$object = new Mandrill($mock, $this->getConfig());
 
 		$this->assertSame($mock, $object->getMandrill());
 	}

@@ -36,6 +36,30 @@ abstract class AbstractTransportTest extends Test
 	}
 
 	/**
+	 * Returns a Config container mock
+	 *
+	 * @return Fuel\Config\Container
+	 */
+	protected function getConfig()
+	{
+		$mock = \Mockery::mock('Fuel\\Config\\Container');
+
+		$mock->shouldReceive('merge')
+			->andReturn($mock)
+			->byDefault();
+
+		$mock->shouldReceive('get')
+			->andReturn(array())
+			->byDefault();
+
+		$mock->shouldReceive('set')
+			->andReturn($mock)
+			->byDefault();
+
+		return $mock;
+	}
+
+	/**
 	 * @covers ::send
 	 * @group  Email
 	 */
