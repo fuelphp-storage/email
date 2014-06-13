@@ -34,9 +34,15 @@ abstract class AbstractCommandTest extends Test
 			->andReturn(true)
 			->byDefault();
 
-		$mock->shouldReceive('getConfig')
+		$config = \Mockery::mock('Fuel\\Config\\Container');
+
+		$config->shouldReceive('get')
 			->with('newline')
 			->andReturn("\r\n")
+			->byDefault();
+
+		$mock->shouldReceive('getConfig')
+			->andReturn($config)
 			->byDefault();
 
 		return $mock;
