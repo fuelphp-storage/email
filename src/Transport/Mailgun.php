@@ -61,10 +61,7 @@ class Mailgun extends Transport
 	 */
 	protected function configDefaults(Config $config)
 	{
-		$current = $config->get('email.mailgun', array());
-		$default = array('email' => array('mailgun' => $this->defaults));
-
-		$config->merge($default, $current);
+		$this->globalDefaults['mailgun'] = $this->defaults;
 
 		parent::configDefaults($config);
 	}

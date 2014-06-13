@@ -103,13 +103,9 @@ class Smtp extends Transport
 	 */
 	protected function configDefaults(Config $config)
 	{
-		$current = $config->get('email.smtp', array());
-		$default = array('email' => array('smtp' => $this->defaults));
+		$this->globalDefaults['smtp'] = $this->defaults;
 
-		$currentGlobal = $config->get('email', array());
-		$defaultGlobal = array('email' => $this->globalDefaultsExt);
-
-		$config->merge($defaultGlobal, $currentGlobal, $default, $current);
+		$this->globalDefaults = array_merge_recursive($this->globalDefaults, $this->globalDefaultsExt);
 
 		parent::configDefaults($config);
 	}

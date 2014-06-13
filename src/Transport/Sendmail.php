@@ -38,10 +38,7 @@ class Sendmail extends Transport
 	 */
 	protected function configDefaults(Config $config)
 	{
-		$current = $config->get('email.sendmail', array());
-		$default = array('email' => array('sendmail' => $this->defaults));
-
-		$config->merge($default, $current);
+		$this->globalDefaults['sendmail'] = $this->defaults;
 
 		parent::configDefaults($config);
 	}

@@ -66,10 +66,7 @@ class Mandrill extends Transport
 	 */
 	protected function configDefaults(Config $config)
 	{
-		$current = $config->get('email.mandrill', array());
-		$default = array('email' => array('mandrill' => $this->defaults));
-
-		$config->merge($default, $current);
+		$this->globalDefaults['mandrill'] = $this->defaults;
 
 		parent::configDefaults($config);
 	}
