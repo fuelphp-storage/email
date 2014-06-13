@@ -332,5 +332,7 @@ abstract class Transport implements TransportInterface
 		{
 			$html = wordwrap($html, $this->config['wordwrap'], $this->config['newline'], true);
 		}
+
+		$message->setAltBody($html);
 	}
 }
