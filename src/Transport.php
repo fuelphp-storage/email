@@ -86,38 +86,6 @@ abstract class Transport implements TransportInterface
 	}
 
 	/**
-	 * Gets a configuration item
-	 *
-	 * @param  mixed $key
-	 * @param  mixed $default
-	 *
-	 * @return mixed
-	 *
-	 * @since 2.0
-	 */
-	public function getConfig($key = null, $default = null)
-	{
-		return $this->config->get($this->config, $key, $default);
-	}
-
-	/**
-	 * Sets a configuration item
-	 *
-	 * @param string $key
-	 * @param mixed  $value
-	 *
-	 * @return this
-	 *
-	 * @since 2.0
-	 */
-	public function setConfig($key, $value)
-	{
-		$this->config->set($key, $value);
-
-		return $this;
-	}
-
-	/**
 	 * Returns unique id for the message
 	 *
 	 * @param Message $message
