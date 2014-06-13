@@ -8,7 +8,7 @@
  * @link      http://fuelphp.com
  */
 
-namespace Fuel\Email\Socket;
+namespace Fuel\Email\Transport\Connection;
 
 use Codeception\TestCase\Test;
 use RuntimeException;
@@ -19,18 +19,18 @@ use RuntimeException;
  * @package Fuel\Email
  * @author  Fuel Development Team
  *
- * @coversDefaultClass  Fuel\Email\Socket\Client
+ * @coversDefaultClass  Fuel\Email\Transport\Connection\Socket
  */
-class ClientTest extends Test
+class SocketTest extends Test
 {
 	/**
-	 * @var Fuel\Email\Socket\Client
+	 * @var Fuel\Email\Transport\Connection\Socket
 	 */
 	protected $object;
 
 	public function _before()
 	{
-		$this->object = new Client;
+		$this->object = new Socket;
 
 		try
 		{
@@ -54,9 +54,9 @@ class ClientTest extends Test
 	 */
 	public function testOpen()
 	{
-		$object = new Client;
+		$object = new Socket;
 		$this->assertTrue($object->open('tcp://127.0.0.1:1025'));
-		$this->assertTrue($object->isState(Client::ESTABILISHED));
+		$this->assertTrue($object->isState(Socket::ESTABILISHED));
 	}
 
 	/**
@@ -66,7 +66,7 @@ class ClientTest extends Test
 	 */
 	public function testOpenInvalidTimeout()
 	{
-		$object = new Client;
+		$object = new Socket;
 		$object->open('tcp://127.0.0.1:1025', 'INVALID');
 	}
 
@@ -87,7 +87,7 @@ class ClientTest extends Test
 	 */
 	public function testOpenInvalidStream()
 	{
-		$object = new Client;
+		$object = new Socket;
 		$object->open('tcp', 'localhosta', 1025);
 	}
 
@@ -98,7 +98,7 @@ class ClientTest extends Test
 	public function testClose()
 	{
 		$this->assertTrue($this->object->close());
-		$this->assertTrue($this->object->isState(Client::CLOSED));
+		$this->assertTrue($this->object->isState(Socket::CLOSED));
 		$this->object->open('tcp://127.0.0.1:1025');
 	}
 
@@ -109,7 +109,7 @@ class ClientTest extends Test
 	 */
 	public function testAlreadyClosed()
 	{
-		$object = new Client;
+		$object = new Socket;
 		$object->close();
 	}
 
@@ -120,7 +120,7 @@ class ClientTest extends Test
 	 */
 	public function testState()
 	{
-		$this->assertEquals(Client::ESTABILISHED, $state = $this->object->getState());
+		$this->assertEquals(Socket::ESTABILISHED, $state = $this->object->getState());
 		$this->assertTrue($this->object->isState($state));
 	}
 

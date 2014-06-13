@@ -10,12 +10,12 @@
 
 namespace Fuel\Email\Transport;
 
+use Fuel\Email\Transport\Connection\Socket;
 use Fuel\Email\Transport\Smtp\Authentication;
 use Fuel\Email\Transport\Smtp\Response;
 use Fuel\Email\Transport\Smtp\Command;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Email\Socket\Client;
 use Fuel\Common\Arr;
 use LogicException;
 
@@ -52,11 +52,11 @@ class Smtp extends Transport
 	];
 
 	/**
-	 * Socket client
+	 * Socket connection
 	 *
-	 * @var Client
+	 * @var Socket
 	 */
-	protected $client;
+	protected $connection;
 
 	/**
 	 * Last recieved response from server
@@ -72,9 +72,9 @@ class Smtp extends Transport
 	 */
 	protected $responses = [];
 
-	public function __construct(Client $client, array $config = array())
+	public function __construct(Socket $connection, array $config = array())
 	{
-		$this->client = $client;
+		$this->connection = $connection;
 
 		$config['smtp'] = Arr::merge($this->defaults, Arr::get($config, 'smtp', array()));
 
@@ -164,7 +164,7 @@ class Smtp extends Transport
 	}
 
 	/**
-	 * Write data to Client stream
+	 * Write data to connection stream
 	 *
 	 * @param  string $data
 	 *
@@ -174,17 +174,17 @@ class Smtp extends Transport
 	 */
 	public function write($data)
 	{
-		return $this->client->write($data, $this->config['newline']);
+		return $this->connection->write($data, $this->config['newline']);
 	}
 
 	/**
-	 * Returns Client stream
+	 * Returns connection stream
 	 *
 	 * @return resource
 	 */
 	public function getStream()
 	{
-		return $this->client->getStream();
+		return $this->connection->getStream();
 	}
 
 	/**

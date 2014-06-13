@@ -8,7 +8,7 @@
  * @link      http://fuelphp.com
  */
 
-namespace Fuel\Email\Socket;
+namespace Fuel\Email\Transport\Connection;
 
 use Exception;
 use LogicException;
@@ -22,7 +22,7 @@ use RuntimeException;
  *
  * @since 2.0
  */
-class Client
+class Socket
 {
 	/**
 	 * Connection states
@@ -61,7 +61,7 @@ class Client
 	{
 		if ($this->isState(static::CLOSED) === false)
 		{
-			throw new LogicException('Connection is already closed.');
+			throw new LogicException('Connection is already opened.');
 		}
 
 		$errno = 0;

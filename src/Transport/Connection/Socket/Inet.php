@@ -8,9 +8,9 @@
  * @link      http://fuelphp.com
  */
 
-namespace Fuel\Email\Socket\Client;
+namespace Fuel\Email\Transport\Connection\Socket;
 
-use Fuel\Email\Socket\Client;
+use Fuel\Email\Transport\Connection\Socket;
 
 /**
  * Inet socket client
@@ -20,44 +20,45 @@ use Fuel\Email\Socket\Client;
  *
  * @since 2.0
  */
-class Inet extends Client
+class Inet extends Socket
 {
 	/**
-	 * Path
+	 * Hostname
 	 *
 	 * @var string
 	 */
-	protected $path;
+	protected $hostname;
 
 	/**
-	 * Creates a new unix socket client
+	 * Creates a new inet socket client
 	 *
-	 * @param string   $path
 	 * @param string   $protocol
+	 * @param string   $hostname
+	 * @param integer  $port
 	 * @param integer  $timeout
 	 * @param integer  $flags
 	 * @param resource $context
 	 *
 	 * @since 2.0
 	 */
-	public function __construct($path, $protocol = 'unix', $timeout = 30, $flags = STREAM_CLIENT_CONNECT, $context = null)
+	public function __construct($protocol, $hostname, $port, $timeout = 30, $flags = STREAM_CLIENT_CONNECT, $context = null)
 	{
-		$this->path = $path;
+		$this->hostname = $hostname;
 
-		$remote_socket = sprintf('%s://%s', $protocol, $path);
+		$remote_socket = sprintf('%s://%s:%d', $protocol, gethostbyname($hostname), $port);
 
 		$this->open($remote_socket, $timeout, $flags, $context);
 	}
 
 	/**
-	 * Returns the path
+	 * Returns the hostname
 	 *
 	 * @return string
 	 *
 	 * @since 2.0
 	 */
-	public function getPath()
+	public function getHostname()
 	{
-		return $this->path;
+		return $this->hostname;
 	}
 }
