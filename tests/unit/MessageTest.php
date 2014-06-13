@@ -123,11 +123,15 @@ class MessageTest extends Test
 
 		$this->assertEquals($body, $this->object->getAltBody());
 
+		$this->assertTrue($this->object->hasAltBody());
+
 		$this->assertEquals('plain', $this->object->getType());
+
+		$body = 'html';
 
 		$this->assertSame($this->object, $this->object->htmlBody($body));
 
-		$this->assertEquals($body, $this->object->getAltBody());
+		$this->assertEquals($body, $this->object->getBody());
 
 		$this->assertEquals('html', $this->object->getType());
 	}

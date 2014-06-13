@@ -336,6 +336,18 @@ class Message
 	}
 
 	/**
+	 * Checks whether message has an alternative body
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function hasAltBody()
+	{
+		return empty($this->altBody) === false;
+	}
+
+	/**
 	 * Sets alternative body
 	 *
 	 * @param strint $altBody
