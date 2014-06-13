@@ -86,6 +86,18 @@ abstract class Transport implements TransportInterface
 	}
 
 	/**
+	 * Returns the Config container
+	 *
+	 * @return mixed
+	 *
+	 * @since 2.0
+	 */
+	public function getConfig()
+	{
+		return $this->config;
+	}
+
+	/**
 	 * Returns unique id for the message
 	 *
 	 * @param Message $message
