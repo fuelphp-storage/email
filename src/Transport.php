@@ -307,7 +307,7 @@ abstract class Transport implements TransportInterface
 	{
 		$html = preg_replace('/[ |	]{2,}/m', ' ', $message->getBody());
 		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
-		$lines = explode($newline, $html);
+		$lines = explode($this->config['newline'], $html);
 		$result = array();
 		$firstNewline = true;
 
