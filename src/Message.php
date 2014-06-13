@@ -535,6 +535,18 @@ class Message
 	}
 
 	/**
+	 * Checks type
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function isType($type)
+	{
+		return $this->type === $type;
+	}
+
+	/**
 	 * Sets message type
 	 *
 	 * @param string $type

@@ -226,6 +226,8 @@ class MessageTest extends Test
 		$this->assertSame($this->object, $this->object->setType(Message::HTML));
 
 		$this->assertEquals(Message::HTML, $this->object->getType());
+
+		$this->assertTrue($this->object->isType(Message::HTML));
 	}
 
 	/**
