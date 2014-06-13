@@ -10,13 +10,13 @@
 
 namespace Fuel\Email\Transport;
 
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport\Connection\Socket;
 use Fuel\Email\Transport\Smtp\Authentication;
 use Fuel\Email\Transport\Smtp\Response;
 use Fuel\Email\Transport\Smtp\Command;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Common\Arr;
 use LogicException;
 
 /**
@@ -72,7 +72,7 @@ class Smtp extends Transport
 	 */
 	protected $responses = [];
 
-	public function __construct(Socket $connection, array $config = array())
+	public function __construct(Socket $connection, Config $config)
 	{
 		$this->connection = $connection;
 
