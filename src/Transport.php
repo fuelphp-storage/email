@@ -145,7 +145,7 @@ abstract class Transport implements TransportInterface
 		{
 			$name = $address->getName();
 
-			if ($this->config['encode_headers'])
+			if ($this->config['email']['encode_headers'])
 			{
 				$name = $this->encodeMimeHeader($name);
 			}
@@ -169,12 +169,12 @@ abstract class Transport implements TransportInterface
 	{
 		$transfer_encoding = 'B';
 
-		if ($this->config['encoding'] === 'quoted-printable')
+		if ($this->config['email']['encoding'] === 'quoted-printable')
 		{
 			$transfer_encoding = 'Q';
 		}
 
-		return mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
+		return mb_encode_mimeheader($header, $this->config['email']['charset'], $transfer_encoding, $this->config['email']['newline']);
 	}
 
 	/**
@@ -194,7 +194,7 @@ abstract class Transport implements TransportInterface
 	{
 		if ($newline === null)
 		{
-			$newline = $this->config['newline'];
+			$newline = $this->config['email']['newline'];
 		}
 
 		switch ($encoding)
@@ -205,7 +205,7 @@ abstract class Transport implements TransportInterface
 			case '8bit':
 				return $this->prepNewlines(rtrim($string, $newline), $newline);
 			case 'base64':
-				return chunk_split(base64_encode($string), $this->config['wordwrap'], $newline);
+				return chunk_split(base64_encode($string), $this->config['email']['wordwrap'], $newline);
 			default:
 				throw new InvalidArgumentException('This is not a supported encoding method. ['.$encoding.']');
 		}
@@ -225,7 +225,7 @@ abstract class Transport implements TransportInterface
 	{
 		if ($newline === null)
 		{
-			$newline = $this->config['newline'];
+			$newline = $this->config['email']['newline'];
 		}
 
 		$replace = array(
@@ -250,21 +250,21 @@ abstract class Transport implements TransportInterface
 		$html = $message->getBody();
 
 		// Remove html comments
-		if ($this->config['html']['remove_comments'])
+		if ($this->config['email']['html']['remove_comments'])
 		{
 			$html = preg_replace('/<!--(.*)-->/', '', $html);
 		}
 
 		// Auto attach all images
 		// TODO single or double quote
-		if ($this->config['html']['auto_attach'])
+		if ($this->config['email']['html']['auto_attach'])
 		{
 			preg_match_all("/(src|background)=\"(.*)\"/Ui", $html, $images);
 
 			if (empty($images[2]) === false)
 			{
 				// TODO Remove dependency
-				$finder = new Finder($this->config['html']['attach_paths']);
+				$finder = new Finder($this->config['email']['html']['attach_paths']);
 				$finder->returnHandlers();
 
 				foreach ($images[2] as $i => $imageUrl)
@@ -276,7 +276,7 @@ abstract class Transport implements TransportInterface
 
 						if ($file)
 						{
-							$attachment = new $this->config['html']['attach_class']($file);
+							$attachment = new $this->config['email']['html']['attach_class']($file);
 							$attachment->setInline();
 							$message->attach($attachment);
 
@@ -290,7 +290,7 @@ abstract class Transport implements TransportInterface
 
 		$message->setBody($html);
 
-		if ($message->hasAltBody() === false and $this->config['html']['generate_alt'])
+		if ($message->hasAltBody() === false and $this->config['email']['html']['generate_alt'])
 		{
 			$this->generateAlt($message);
 		}
@@ -307,7 +307,7 @@ abstract class Transport implements TransportInterface
 	{
 		$html = preg_replace('/[ |	]{2,}/m', ' ', $message->getBody());
 		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
-		$lines = explode($this->config['newline'], $html);
+		$lines = explode($this->config['email']['newline'], $html);
 		$result = array();
 		$firstNewline = true;
 
@@ -326,11 +326,11 @@ abstract class Transport implements TransportInterface
 			}
 		}
 
-		$html = join($this->config['newline'], $result);
+		$html = join($this->config['email']['newline'], $result);
 
-		if ($this->config['wordwrap'] > 0)
+		if ($this->config['email']['wordwrap'] > 0)
 		{
-			$html = wordwrap($html, $this->config['wordwrap'], $this->config['newline'], true);
+			$html = wordwrap($html, $this->config['email']['wordwrap'], $this->config['email']['newline'], true);
 		}
 
 		$message->setAltBody($html);
