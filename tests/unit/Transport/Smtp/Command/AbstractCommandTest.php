@@ -37,7 +37,7 @@ abstract class AbstractCommandTest extends Test
 		$config = \Mockery::mock('Fuel\\Config\\Container');
 
 		$config->shouldReceive('get')
-			->with('newline')
+			->with('email.newline', "\r\n")
 			->andReturn("\r\n")
 			->byDefault();
 

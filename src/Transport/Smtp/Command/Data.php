@@ -32,7 +32,7 @@ class Data extends Command
 
 		if (is_string($data))
 		{
-			$data = explode($smtp->getConfig()->get('newline'), $data);
+			$data = explode($smtp->getConfig()->get('email.newline', "\r\n"), $data);
 		}
 
 		$this->data = $data;
