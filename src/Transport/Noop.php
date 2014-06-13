@@ -10,9 +10,10 @@
 
 namespace Fuel\Email\Transport;
 
+use Psr\Log\LoggerInterface;
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Psr\Log\LoggerInterface;
 
 /**
  * Only log the message
@@ -33,9 +34,11 @@ class Noop extends Transport
 	 *
 	 * @since 2.0
 	 */
-	public function __construct(LoggerInterface $logger)
+	public function __construct(LoggerInterface $logger, Config $config)
 	{
 		$this->setLogger($logger);
+
+		parent::__construct($config);
 	}
 
 	/**

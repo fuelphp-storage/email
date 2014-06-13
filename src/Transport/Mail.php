@@ -10,9 +10,9 @@
 
 namespace Fuel\Email\Transport;
 
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Common\Arr;
 
 /**
  * Uses PHP mail() function to send mail
@@ -24,29 +24,6 @@ use Fuel\Common\Arr;
  */
 class Mail extends Transport
 {
-	/**
-	 * Mail email configuration defaults
-	 *
-	 * @var []
-	 */
-	protected $defaults = [
-		'return_path' => '',
-	];
-
-	/**
-	 * Creates Mail Transport
-	 *
-	 * @param array $config
-	 *
-	 * @since 2.0
-	 */
-	public function __construct(array $config = array())
-	{
-		$config['mail'] = Arr::merge($this->defaults, Arr::get($config, 'mail', array()));
-
-		parent::__construct($config);
-	}
-
 	/**
 	 * {@inheritdocs}
 	 */

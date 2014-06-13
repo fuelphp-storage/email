@@ -32,9 +32,9 @@ class Smtp extends Transport
 	/**
 	 * {@inheritdocs}
 	 */
-	// protected $globalDefaults = [
-	// 	'newline' => "\r\n",
-	// ];
+	protected $globalDefaultsExt = [
+		'newline' => "\r\n",
+	];
 
 	/**
 	 * SMTP email configuration defaults
@@ -76,10 +76,6 @@ class Smtp extends Transport
 	{
 		$this->connection = $connection;
 
-		$config['smtp'] = Arr::merge($this->defaults, Arr::get($config, 'smtp', array()));
-
-		// $this->globalDefaults = Arr::merge(parent::$globalDefaults, $this->globalDefaults);
-
 		parent::__construct($config);
 
 		$greeting = $this->read();
@@ -100,6 +96,22 @@ class Smtp extends Transport
 
 			$this->sayHello();
 		}
+	}
+
+	/**
+	 * {@inheritdocs}
+	 */
+	protected function configDefaults(Config $config)
+	{
+		$current = $config->get('email.smtp', array());
+		$default = array('email' => array('smtp' => $this->defaults));
+
+		$currentGlobal = $config->get('email', array());
+		$defaultGlobal = array('email' => $this->globalDefaultsExt);
+
+		$config->merge($defaultGlobal, $currentGlobal, $default, $current);
+
+		parent::configDefaults($config);
 	}
 
 	/**

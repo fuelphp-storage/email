@@ -11,9 +11,9 @@
 namespace Fuel\Email\Transport;
 
 use Mandrill as MandrillObject;
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Common\Arr;
 
 /**
  * Uses MailChimp's Mandrill to send mail
@@ -50,17 +50,28 @@ class Mandrill extends Transport
 	 * Creates Mandrill Transport
 	 *
 	 * @param MandrillObject $mandrill
-	 * @param array          $config
+	 * @param Config         $config
 	 *
 	 * @since 2.0
 	 */
-	public function __construct(MandrillObject $mandrill, array $config = array())
+	public function __construct(MandrillObject $mandrill, Config $config)
 	{
 		$this->mandrill = $mandrill;
 
-		$config['mandrill'] = Arr::merge($this->defaults, Arr::get($config, 'mandrill', array()));
-
 		parent::__construct($config);
+	}
+
+	/**
+	 * {@inheritdocs}
+	 */
+	protected function configDefaults(Config $config)
+	{
+		$current = $config->get('email.mandrill', array());
+		$default = array('email' => array('mandrill' => $this->defaults));
+
+		$config->merge($default, $current);
+
+		parent::configDefaults($config);
 	}
 
 	/**

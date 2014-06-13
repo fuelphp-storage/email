@@ -10,9 +10,9 @@
 
 namespace Fuel\Email\Transport;
 
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Common\Arr;
 
 /**
  * Uses Sendmail to send mail
@@ -30,22 +30,20 @@ class Sendmail extends Transport
 	 * @var []
 	 */
 	protected $defaults = [
-		'path'        => '/usr/sbin/sendmail',
-		'return_path' => '',
+		'path'  => '/usr/sbin/sendmail',
 	];
 
 	/**
-	 * Creates Sendmail Transport
-	 *
-	 * @param array $config
-	 *
-	 * @since 2.0
+	 * {@inheritdocs}
 	 */
-	public function __construct(array $config = array())
+	protected function configDefaults(Config $config)
 	{
-		$config['sendmail'] = Arr::merge($this->defaults, Arr::get($config, 'sendmail', array()));
+		$current = $config->get('email.sendmail', array());
+		$default = array('email' => array('sendmail' => $this->defaults));
 
-		parent::__construct($config);
+		$config->merge($default, $current);
+
+		parent::configDefaults($config);
 	}
 
 	/**

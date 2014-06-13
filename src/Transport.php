@@ -11,7 +11,7 @@
 namespace Fuel\Email;
 
 use Fuel\FileSystem\Finder;
-use Fuel\Common\Arr;
+use Fuel\Config\Container as Config;
 
 /**
  * Defines an abstract class for Transport
@@ -63,10 +63,26 @@ abstract class Transport implements TransportInterface
 	 *
 	 * @since 2.0
 	 */
-	public function __construct(array $config = array())
+	public function __construct(Config $config)
 	{
-		$config = Arr::merge($this->globalDefaults, $config);
+		$this->configDefaults($config);
+
 		$this->config = $config;
+	}
+
+	/**
+	 * Populates Config container with default values
+	 *
+	 * @param Config $config
+	 *
+	 * @since 2.0
+	 */
+	protected function configDefaults(Config $config)
+	{
+		$current = $config->get('email', array());
+		$default = array('email' => $this->globalDefaults);
+
+		$config->merge($default, $current);
 	}
 
 	/**
@@ -81,14 +97,14 @@ abstract class Transport implements TransportInterface
 	 */
 	public function getConfig($key = null, $default = null)
 	{
-		return Arr::get($this->config, $key, $default);
+		return $this->config->get($this->config, $key, $default);
 	}
 
 	/**
 	 * Sets a configuration item
 	 *
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 *
 	 * @return this
 	 *
@@ -96,7 +112,7 @@ abstract class Transport implements TransportInterface
 	 */
 	public function setConfig($key, $value)
 	{
-		Arr::set($this->config, $key, $value);
+		$this->config->set($key, $value);
 
 		return $this;
 	}

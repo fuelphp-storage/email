@@ -11,9 +11,9 @@
 namespace Fuel\Email\Transport;
 
 use Mailgun\Mailgun as MailgunObject;
+use Fuel\Config\Container as Config;
 use Fuel\Email\Transport;
 use Fuel\Email\Message;
-use Fuel\Common\Arr;
 
 /**
  * Uses Rackspace's Mailgun to send mail
@@ -45,17 +45,28 @@ class Mailgun extends Transport
 	 * Creates Mailgun Transport
 	 *
 	 * @param MailgunObject $mailgun
-	 * @param array         $config
+	 * @param Config        $config
 	 *
 	 * @since 2.0
 	 */
-	public function __construct(MailgunObject $mailgun, array $config = array())
+	public function __construct(MailgunObject $mailgun, Config $config)
 	{
 		$this->mailgun = $mailgun;
 
-		$config['mailgun'] = Arr::merge($this->defaults, Arr::get($config, 'mailgun', array()));
-
 		parent::__construct($config);
+	}
+
+	/**
+	 * {@inheritdocs}
+	 */
+	protected function configDefaults(Config $config)
+	{
+		$current = $config->get('email.mailgun', array());
+		$default = array('email' => array('mailgun' => $this->defaults));
+
+		$config->merge($default, $current);
+
+		parent::configDefaults($config);
 	}
 
 	/**
