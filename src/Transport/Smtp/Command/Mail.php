@@ -20,31 +20,7 @@ use Fuel\Email\Transport\Smtp;
  *
  * @since 2.0
  */
-class Mail extends Simple
+class Mail extends Address
 {
 	protected $command = 'MAIL FROM';
-
-	protected $code = 250;
-
-	/**
-	 * From
-	 *
-	 * @var string
-	 */
-	protected $from;
-
-	public function __construct(Smtp $smtp, $from)
-	{
-		parent::__construct($smtp);
-
-		$this->from = $from;
-	}
-
-	/**
-	 * {@inheritdocs}
-	 */
-	protected function getCommand()
-	{
-		return $this->command . ': ' . $this->from;
-	}
 }

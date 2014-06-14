@@ -13,14 +13,14 @@ namespace Fuel\Email\Transport\Smtp\Command;
 use Fuel\Email\Transport\Smtp\Response;
 
 /**
- * Tests for RCPT TP command
+ * Tests for Address command
  *
  * @package Fuel\Email
  * @author  Fuel Development Team
  *
- * @coversDefaultClass  Fuel\Email\Transport\Smtp\Command\Rcpt
+ * @coversDefaultClass  Fuel\Email\Transport\Smtp\Command\Address
  */
-class RcptTest extends AbstractCommandTest
+class AddressTest extends AbstractCommandTest
 {
 	public function _before()
 	{
@@ -29,26 +29,20 @@ class RcptTest extends AbstractCommandTest
 		$mock->shouldReceive('read')
 			->andReturn(new Response('250'));
 
-		$this->object = new Rcpt($mock, 'john@doe.com');
-	}
-
-	/**
-	 * @covers ::getCommand
-	 * @group  Email
-	 */
-	public function testExecute()
-	{
-		$this->invoke($this->object);
+		$this->object = new DummyAddressCommand($mock, 'john@doe.com');
 	}
 
 	/**
 	 * @covers ::__construct
+	 * @covers ::getCommand
 	 * @group  Email
 	 */
 	public function testConstruct()
 	{
 		$mock = $this->createMock();
 
-		$object = new Rcpt($mock, 'john@doe.com');
+		$object = new DummyAddressCommand($mock, 'john@doe.com');
+
+		$this->assertEquals('ADDRESS: john@doe.com', $object->getCommand());
 	}
 }

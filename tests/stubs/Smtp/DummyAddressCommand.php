@@ -10,17 +10,17 @@
 
 namespace Fuel\Email\Transport\Smtp\Command;
 
-use Fuel\Email\Transport\Smtp;
+use Fuel\Email\Transport\Smtp\Command\Address;
 
 /**
- * RCPT TO command
+ * Dummy Address command class
  *
  * @package Fuel\Email
  * @author  Fuel Development Team
  *
  * @since 2.0
  */
-class Rcpt extends Simple
+class DummyAddressCommand extends Address
 {
-	protected $command = 'RCPT TO';
+	protected $command = 'ADDRESS';
 }
