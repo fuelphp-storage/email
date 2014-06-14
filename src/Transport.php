@@ -12,6 +12,7 @@ namespace Fuel\Email;
 
 use Fuel\FileSystem\Finder;
 use Fuel\Config\Container as Config;
+use InvalidArgumentException;
 
 /**
  * Defines an abstract class for Transport
@@ -36,21 +37,23 @@ abstract class Transport implements TransportInterface
 	 * @var []
 	 */
 	protected $globalDefaults = [
+		'attach'          => [
+			'auto'  => false,
+			'class' => 'Fuel\\Email\\Attachment\\File',
+			'paths' => [],
+			'root'  => '',
+		],
 		'charset'         => 'utf-8',
 		'encoding'        => '8bit',
 		'encode_headers'  => true,
-		'headers'         => array(
+		'force_mixed'     => false,
+		'headers'         => [
 			'MIME-Version' => '1.0'
-		),
-		'html'            => array(
-			'attach_paths'    => array(
-				'',
-			),
-			'attach_class'    => 'Fuel\\Email\\Attachment\\File',
-			'auto_attach'     => false,
+		],
+		'html'            => [
 			'generate_alt'    => false,
 			'remove_comments' => false,
-		),
+		],
 		'newline'         => "\n",
 		'useragent'       => 'FuelPHP, PHP 5.4+ Framework',
 		'wordwrap'        => 76,
@@ -98,22 +101,6 @@ abstract class Transport implements TransportInterface
 	}
 
 	/**
-	 * Returns unique id for the message
-	 *
-	 * @param Message $message
-	 *
-	 * @return string
-	 *
-	 * @since 2.0
-	 */
-	public function getMessageId(Message $message)
-	{
-		$from = $message->getFrom()->getEmail();
-
-		return "<".uniqid('').strstr($from, '@').">";
-	}
-
-	/**
 	 * Builds the message itself
 	 *
 	 * @param  Message $message
@@ -122,16 +109,261 @@ abstract class Transport implements TransportInterface
 	 */
 	public function buildMessage(Message $message)
 	{
+		$this->checkMessage($message);
+
 		if ($message->isType(Message::HTML))
 		{
 			$this->processHtml($message);
 		}
+
+		$headers = $this->buildHeaders($message);
+	}
+
+	/**
+	 * Checks whether the Message can be sent
+	 *
+	 * @param Message $message
+	 *
+	 * @return boolean
+	 *
+	 * @throws InvalidArgumentException If Message has missing parts
+	 *
+	 * @since 2.0
+	 */
+	protected function checkMessage()
+	{
+		if ($message->hasRecipients() === false)
+		{
+			throw new InvalidArgumentException('Message without recipients cannot be sent.');
+		}
+
+		if ($message->getFrom() === null)
+		{
+			throw new InvalidArgumentException('Message without sender cannot be sent.');
+		}
+
+		return true;
+	}
+
+	/**
+	 * Processes HTML body
+	 *
+	 * @param  Message $message
+	 *
+	 * @since 2.0
+	 */
+	public function processHtml(Message $message)
+	{
+		$html = $message->getBody();
+
+		// Remove html comments
+		if ($this->config['email']['html']['remove_comments'])
+		{
+			$html = preg_replace('/<!--(.*)-->/', '', $html);
+		}
+
+		// Auto attach all images
+		// TODO single or double quote
+		if ($this->config['email']['attach']['auto'])
+		{
+			preg_match_all("/(src|background)=\"(.*)\"/Ui", $html, $images);
+
+			if (empty($images[2]) === false)
+			{
+				// TODO Remove dependency
+				$finder = new Finder(
+					$this->config['email']['attach']['paths'],
+					null,
+					$this->config['email']['attach']['root']
+				);
+				$finder->returnHandlers();
+
+				foreach ($images[2] as $i => $imageUrl)
+				{
+					// Don't attach absolute urls and already inline content
+					if (preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|^data\:|^#)/Ui', $imageUrl) === false)
+					{
+						$file = $finder->findFile($imageUrl);
+
+						if ($file)
+						{
+							$attachment = new $this->config['email']['attach']['class']($file);
+							$attachment->setInline();
+							$message->attach($attachment);
+
+							$cid = $attachment->getCid();
+							$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($imageUrl, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $html);
+						}
+					}
+				}
+			}
+		}
+
+		$message->setBody($html);
+
+		if ($message->hasAltBody() === false and $this->config['email']['html']['generate_alt'])
+		{
+			$this->generateAlt($message);
+		}
+	}
+
+	/**
+	 * Generates an alt body
+	 *
+	 * @param Message $message
+	 *
+	 * @since 2.0
+	 */
+	protected function generateAlt(Message $message)
+	{
+		$html = preg_replace('/[ |	]{2,}/m', ' ', $message->getBody());
+		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
+		$lines = explode($this->config['email']['newline'], $html);
+		$result = array();
+		$firstNewline = true;
+
+		foreach ($lines as $line)
+		{
+			$line = trim($line);
+
+			if (empty($line) === false or $firstNewline)
+			{
+				$firstNewline = false;
+				$result[] = $line;
+			}
+			else
+			{
+				$firstNewline = true;
+			}
+		}
+
+		$html = join($this->config['email']['newline'], $result);
+
+		if ($this->config['email']['wordwrap'] > 0)
+		{
+			$html = wordwrap($html, $this->config['email']['wordwrap'], $this->config['email']['newline'], true);
+		}
+
+		$message->setAltBody($html);
+	}
+
+	/**
+	 * Builds headers
+	 *
+	 * @param  Message $message
+	 *
+	 * @return []
+	 *
+	 * @since 2.0
+	 */
+	protected function buildHeaders(Message $message)
+	{
+		$headers = array_merge(
+			$this->config['email']['headers'],
+			$message->getHeaders(),
+			$this->buildAddresses($message)
+		);
+
+		$headers['Date'] = date('r');
+
+		$headers['Message-ID'] = $this->getMessageId($message);
+
+		$headers['X-Priority'] = $this->formatPriority($message);
+
+		$headers['X-Mailer'] = $this->config['email']['useragent'];
+
+		$subject = $message->getSubject();
+
+		if ($this->config['email']['encode_headers'])
+		{
+			$subject = $this->encodeMimeHeader($subject);
+		}
+
+		$headers['Subject'] = $subject;
+	}
+
+	/**
+	 * Builds address type headers
+	 *
+	 * @param Message $message
+	 *
+	 * @return []
+	 *
+	 * @since 2.0
+	 */
+	protected function buildAddresses(Message $message)
+	{
+		$headers = [];
+
+		$headers['From'] = $this->formatAddress($message->getFrom());
+
+		$replyTo = $this->buildAddressList($message->getReplyTo());
+
+		if (empty($replyTo) === false)
+		{
+			$headers['Reply-To'] = $replyTo;
+		}
+
+		return array_merge($headers, $this->buildRecipients($message));
+	}
+
+	/**
+	 * Builds recipient header array
+	 *
+	 * @param Message $message
+	 *
+	 * @return []
+	 *
+	 * @since 2.0
+	 */
+	protected function buildRecipients(Message $message)
+	{
+		$headers = [];
+
+		foreach (array('to', 'cc', 'bcc') as $type)
+		{
+			$list = $this->buildAddressList($message->getRecipientsOfType($type));
+			$header = ucfirst($type);
+
+			// Default recipient headers
+			// There should be a general way instead of this
+			if ($default = $this->config->get('email.header.'.$header, false))
+			{
+				$list .= ', ' . $default;
+			}
+
+			if (empty($list) === false)
+			{
+				$headers[$header] = $list;
+			}
+		}
+
+		return $headers;
+	}
+
+	/**
+	 * Builds an address list into string
+	 *
+	 * @param Address[]  $addresses
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	protected function buildAddressList(array $addresses)
+	{
+		foreach ($addresses as $key => $address)
+		{
+			$addresses[$key] = $this->formatAddress($address);
+		}
+
+		return join(', ', $formatted);
 	}
 
 	/**
 	 * Format an address
 	 *
-	 * @param  Address $address
+	 * @param Address $address
 	 *
 	 * @return string
 	 *
@@ -159,7 +391,7 @@ abstract class Transport implements TransportInterface
 	/**
 	 * Encodes MIME header according to the config
 	 *
-	 * @param  string $header
+	 * @param string $header
 	 *
 	 * @return string
 	 *
@@ -175,6 +407,65 @@ abstract class Transport implements TransportInterface
 		}
 
 		return mb_encode_mimeheader($header, $this->config['email']['charset'], $transfer_encoding, $this->config['email']['newline']);
+	}
+
+	/**
+	 * Returns unique id for the message
+	 *
+	 * @param Message $message
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	public function getMessageId(Message $message)
+	{
+		$from = $message->getFrom()->getEmail();
+
+		return "<".uniqid('').strstr($from, '@').">";
+	}
+
+	/**
+	 * Formats priority to string
+	 *
+	 * @param Message $message
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	protected function formatPriority(Message $message)
+	{
+		$priority = $message->getPriority();
+
+		return '(' . $priority . ' ' . ucfirst(strtolower($message->getPriorityName($priority))) . ')';
+	}
+
+	/**
+	 * Returns Content-Type
+	 *
+	 * @param Message $message
+	 * @param string  $boundary
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	protected function getContentType(Message $message, $boundary)
+	{
+		$related = $this->config['email']['force_mixed'] ? 'multipart/mixed; ' : 'multipart/related; ';
+
+		if ($message->isType(Message::PLAIN))
+		{
+			if ($message->hasAttachments())
+			{
+				return $related.$boundary;
+			}
+
+			return 'text/plain';
+		}
+
+
 	}
 
 	/**
@@ -236,103 +527,5 @@ abstract class Transport implements TransportInterface
 		);
 
 		return str_replace(array_keys($replace), $replace, $string);
-	}
-
-	/**
-	 * Processes HTML body
-	 *
-	 * @param  Message $message
-	 *
-	 * @since 2.0
-	 */
-	public function processHtml(Message $message)
-	{
-		$html = $message->getBody();
-
-		// Remove html comments
-		if ($this->config['email']['html']['remove_comments'])
-		{
-			$html = preg_replace('/<!--(.*)-->/', '', $html);
-		}
-
-		// Auto attach all images
-		// TODO single or double quote
-		if ($this->config['email']['html']['auto_attach'])
-		{
-			preg_match_all("/(src|background)=\"(.*)\"/Ui", $html, $images);
-
-			if (empty($images[2]) === false)
-			{
-				// TODO Remove dependency
-				$finder = new Finder($this->config['email']['html']['attach_paths']);
-				$finder->returnHandlers();
-
-				foreach ($images[2] as $i => $imageUrl)
-				{
-					// Don't attach absolute urls and already inline content
-					if (preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|^data\:|^#)/Ui', $imageUrl) === false)
-					{
-						$file = $finder->findFile($imageUrl);
-
-						if ($file)
-						{
-							$attachment = new $this->config['email']['html']['attach_class']($file);
-							$attachment->setInline();
-							$message->attach($attachment);
-
-							$cid = $attachment->getCid();
-							$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($imageUrl, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $html);
-						}
-					}
-				}
-			}
-		}
-
-		$message->setBody($html);
-
-		if ($message->hasAltBody() === false and $this->config['email']['html']['generate_alt'])
-		{
-			$this->generateAlt($message);
-		}
-	}
-
-	/**
-	 * Generates an alt body
-	 *
-	 * @param Message $message
-	 *
-	 * @since 2.0
-	 */
-	protected static function generateAlt(Message $message)
-	{
-		$html = preg_replace('/[ |	]{2,}/m', ' ', $message->getBody());
-		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
-		$lines = explode($this->config['email']['newline'], $html);
-		$result = array();
-		$firstNewline = true;
-
-		foreach ($lines as $line)
-		{
-			$line = trim($line);
-
-			if (empty($line) === false or $firstNewline)
-			{
-				$firstNewline = false;
-				$result[] = $line;
-			}
-			else
-			{
-				$firstNewline = true;
-			}
-		}
-
-		$html = join($this->config['email']['newline'], $result);
-
-		if ($this->config['email']['wordwrap'] > 0)
-		{
-			$html = wordwrap($html, $this->config['email']['wordwrap'], $this->config['email']['newline'], true);
-		}
-
-		$message->setAltBody($html);
 	}
 }
