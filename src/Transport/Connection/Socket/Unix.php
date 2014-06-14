@@ -20,7 +20,7 @@ use Fuel\Email\Transport\Connection\Socket;
  *
  * @since 2.0
  */
-class Inet extends Socket
+class Unix extends Socket
 {
 	/**
 	 * Path
