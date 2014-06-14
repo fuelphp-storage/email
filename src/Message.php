@@ -10,7 +10,6 @@
 
 namespace Fuel\Email;
 
-use Fuel\Common\Arr;
 use InvalidArgumentException;
 
 /**
@@ -468,7 +467,7 @@ class Message
 	 */
 	public static function getPriorityName($priority)
 	{
-		if (Arr::has(static::$priorities, $priority) === false)
+		if (array_key_exists($priority, static::$priorities) === false)
 		{
 			throw new InvalidArgumentException('EMA-004: This priority is not defined, use one of the following. ['.$priority.', ['.implode(', ', array_keys(static::$priorities)) . ']]');
 		}
