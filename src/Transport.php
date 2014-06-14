@@ -22,7 +22,7 @@ use InvalidArgumentException;
  *
  * @since 2.0
  */
-abstract class Transport implements TransportInterface
+abstract class Transport
 {
 	/**
 	 * Passed configuration array
@@ -99,6 +99,17 @@ abstract class Transport implements TransportInterface
 	{
 		return $this->config;
 	}
+
+	/**
+	 * The main sending function
+	 *
+	 * @param  Message $message
+	 *
+	 * @return boolean Success or failure
+	 *
+	 * @since 2.0
+	 */
+	abstract public function send(Message $message);
 
 	/**
 	 * Builds the message itself
