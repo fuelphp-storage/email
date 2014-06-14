@@ -128,6 +128,9 @@ abstract class Transport
 		}
 
 		$headers = $this->buildHeaders($message);
+		$body = $message->getBody();
+
+		return compact('headers', 'body');
 	}
 
 	/**
@@ -141,7 +144,7 @@ abstract class Transport
 	 *
 	 * @since 2.0
 	 */
-	protected function checkMessage()
+	protected function checkMessage(Message $message)
 	{
 		if ($message->hasRecipients() === false)
 		{
@@ -368,7 +371,7 @@ abstract class Transport
 			$addresses[$key] = $this->formatAddress($address);
 		}
 
-		return join(', ', $formatted);
+		return join(', ', $addresses);
 	}
 
 	/**
