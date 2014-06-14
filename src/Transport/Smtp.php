@@ -157,9 +157,9 @@ class Smtp extends Transport
 	 */
 	public function read()
 	{
-		while ($this->client->isEof() === false)
+		while ($this->connection->isEof() === false)
 		{
-			$response = new Response($this->client->read(512, $this->config['newline']));
+			$response = new Response($this->connection->read(512, $this->config['newline']));
 			$this->responses[] = $response;
 
 			if (substr($response->getResponse(), 3, 1) === chr(0x20))
