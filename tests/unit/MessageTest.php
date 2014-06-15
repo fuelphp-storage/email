@@ -65,6 +65,8 @@ class MessageTest extends Test
 
 		$this->assertEquals([$recipient], $this->object->getRecipientsOfType('to'));
 
+		$this->assertTrue($this->object->hasRecipients());
+
 		$this->assertSame($this->object, $this->object->clearRecipients());
 
 		$this->assertEquals([], $this->object->getRecipients());

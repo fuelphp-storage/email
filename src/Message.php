@@ -195,6 +195,18 @@ class Message
 	}
 
 	/**
+	 * Returns checks whether there are recipients
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function hasRecipients()
+	{
+		return empty($this->recipients) === false;
+	}
+
+	/**
 	 * Clears the list of recipients
 	 *
 	 * @return this
