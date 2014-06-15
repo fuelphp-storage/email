@@ -467,7 +467,29 @@ abstract class Transport
 	 */
 	protected function getContentType(Message $message, $boundary)
 	{
-		$related = $this->config['email']['force_mixed'] ? 'multipart/mixed; ' : 'multipart/related; ';
+		if ($hasAttachments = $message->hasAttachments())
+		{
+			$related = 'multipart/related; ';
+
+			if ($this->config['email']['force_mixed'])
+			{
+				$related = 'multipart/mixed; ';
+			}
+
+			$inline = false;
+			$attachements = false;
+
+			foreach ($message->getAttachments() as $attachment)
+			{
+				if ($inline and $attachments)
+				{
+					continue;
+				}
+
+
+			}
+		}
+
 
 		if ($message->isType(Message::PLAIN))
 		{
@@ -478,16 +500,14 @@ abstract class Transport
 
 			return 'text/plain';
 		}
-
-
 	}
 
 	/**
 	 * Encodes a string in the given encoding
 	 *
-	 * @param string $string   String to encode
-	 * @param string $encoding The charset
-	 * @param string $newline  Newline delimeter
+	 * @param string $string
+	 * @param string $encoding
+	 * @param string $newline
 	 *
 	 * @throws InvalidArgumentException If encoding is not a supported
 	 *
