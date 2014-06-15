@@ -100,11 +100,18 @@ class Message
 	protected $attachments = [];
 
 	/**
+	 * Check whether there are any inline attachments
+	 *
+	 * @var boolean
+	 */
+	protected $hasInline = false;
+
+	/**
 	 * Mail priority
 	 *
 	 * @var string
 	 */
-	protected $priority;
+	protected $priority = 3;
 
 	/**
 	 * Custom headers
@@ -123,7 +130,7 @@ class Message
 	protected $type = 'plain';
 
 	/**
-	 * Returns From address
+	 * Returns the From address
 	 *
 	 * @return Address
 	 *
@@ -135,7 +142,19 @@ class Message
 	}
 
 	/**
-	 * Sets From address
+	 * Checks whether the message has a From address
+	 *
+	 * @return Address
+	 *
+	 * @since 2.0
+	 */
+	public function hasFrom()
+	{
+		return empty($this->from) === false;
+	}
+
+	/**
+	 * Sets the From address
 	 *
 	 * @param Address $from
 	 *
@@ -195,7 +214,7 @@ class Message
 	}
 
 	/**
-	 * Returns checks whether there are recipients
+	 * Checks whether the message has recipients
 	 *
 	 * @return boolean
 	 *
@@ -221,7 +240,7 @@ class Message
 	}
 
 	/**
-	 * Adds Reply-To address
+	 * Adds a Reply-To address
 	 *
 	 * @param Address $replyTo
 	 *
@@ -263,7 +282,7 @@ class Message
 	}
 
 	/**
-	 * Returns subject
+	 * Returns the subject
 	 *
 	 * @return string
 	 *
@@ -275,7 +294,7 @@ class Message
 	}
 
 	/**
-	 * Sets subject
+	 * Sets the subject
 	 *
 	 * @param string $subject
 	 *
@@ -291,7 +310,7 @@ class Message
 	}
 
 	/**
-	 * Returns body
+	 * Returns the body
 	 *
 	 * @return string
 	 *
@@ -303,7 +322,7 @@ class Message
 	}
 
 	/**
-	 * Sets body
+	 * Sets the body
 	 *
 	 * @param string $body
 	 *
@@ -321,7 +340,7 @@ class Message
 	/**
 	 * Sets HTML body
 	 *
-	 * @param  string $body
+	 * @param string $body
 	 *
 	 * @return this
 	 *
@@ -335,7 +354,7 @@ class Message
 	}
 
 	/**
-	 * Get alternative body
+	 * Returns the alternative body
 	 *
 	 * @return string
 	 *
@@ -359,9 +378,9 @@ class Message
 	}
 
 	/**
-	 * Sets alternative body
+	 * Sets the alternative body
 	 *
-	 * @param strint $altBody
+	 * @param string $altBody
 	 *
 	 * @return this
 	 *
@@ -377,7 +396,7 @@ class Message
 	/**
 	 * Adds an attachment
 	 *
-	 * @param  Attachment $attachment
+	 * @param Attachment $attachment
 	 *
 	 * @return this
 	 *
@@ -386,6 +405,11 @@ class Message
 	public function attach(Attachment $attachment)
 	{
 		$this->attachments[] = $attachment;
+
+		if ($attachment->isInline())
+		{
+			$this->hasInline = true;
+		}
 
 		return $this;
 	}
@@ -411,7 +435,19 @@ class Message
 	 */
 	public function hasAttachments()
 	{
-		return ! empty($this->attachments);
+		return empty($this->attachments) === false;
+	}
+
+	/**
+	 * Checks if there are inline attachments
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0
+	 */
+	public function hasInlineAttachments()
+	{
+		return $this->hasAttachments() and $this->hasInline;
 	}
 
 	/**
@@ -424,12 +460,13 @@ class Message
 	public function clearAttachments()
 	{
 		$this->attachments = [];
+		$this->hasInline = false;
 
 		return $this;
 	}
 
 	/**
-	 * Gets the priority
+	 * Returns the priority
 	 *
 	 * @return string
 	 *
@@ -457,7 +494,7 @@ class Message
 	}
 
 	/**
-	 * Returns a list of priorities
+	 * Returns the list of priorities
 	 *
 	 * @return []
 	 *
@@ -471,7 +508,7 @@ class Message
 	/**
 	 * Returns priority name
 	 *
-	 * @param  integer $priority
+	 * @param integer $priority
 	 *
 	 * @return string
 	 *
@@ -546,7 +583,7 @@ class Message
 	}
 
 	/**
-	 * Returns message type
+	 * Returns the message type
 	 *
 	 * @return string
 	 *
@@ -558,7 +595,7 @@ class Message
 	}
 
 	/**
-	 * Checks type
+	 * Checks the message type
 	 *
 	 * @return boolean
 	 *
@@ -570,7 +607,7 @@ class Message
 	}
 
 	/**
-	 * Sets message type
+	 * Sets the message type
 	 *
 	 * @param string $type
 	 *

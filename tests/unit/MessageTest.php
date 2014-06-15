@@ -44,6 +44,8 @@ class MessageTest extends Test
 		$this->assertSame($this->object, $this->object->setFrom($from));
 
 		$this->assertEquals($from, $this->object->getFrom());
+
+		$this->assertTrue($this->object->hasFrom());
 	}
 
 	/**
@@ -147,19 +149,26 @@ class MessageTest extends Test
 	 */
 	public function testAttachment()
 	{
-		$attachment = \Mockery::mock('Fuel\\Email\\Attachment');
+		$mock = \Mockery::mock('Fuel\\Email\\Attachment');
 
-		$this->assertSame($this->object, $this->object->attach($attachment));
+		$mock->shouldReceive('isInline')
+			->andReturn(true);
 
-		$this->assertEquals([$attachment], $this->object->getAttachments());
+		$this->assertSame($this->object, $this->object->attach($mock));
+
+		$this->assertEquals([$mock], $this->object->getAttachments());
 
 		$this->assertTrue($this->object->hasAttachments());
+
+		$this->assertTrue($this->object->hasInlineAttachments());
 
 		$this->assertSame($this->object, $this->object->clearAttachments());
 
 		$this->assertEquals([], $this->object->getAttachments());
 
 		$this->assertFalse($this->object->hasAttachments());
+
+		$this->assertFalse($this->object->hasInlineAttachments());
 	}
 
 	/**
