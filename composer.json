@@ -13,7 +13,6 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"fuelphp/common": "dev-master",
 		"fuelphp/config": "dev-master",
 		"fuelphp/filesystem": "dev-master"
 	},
