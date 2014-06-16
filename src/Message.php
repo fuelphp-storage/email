@@ -427,6 +427,21 @@ class Message
 	}
 
 	/**
+	 * Returns the list of inline attachments
+	 *
+	 * @return Attachment[]
+	 *
+	 * @since 2.0
+	 */
+	public function getInlineAttachments()
+	{
+		return array_filter($this->attachments, function($attachment)
+		{
+			return $attachment->isInline();
+		});
+	}
+
+	/**
 	 * Checks if there are attachments
 	 *
 	 * @return boolean

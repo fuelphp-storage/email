@@ -158,6 +158,8 @@ class MessageTest extends Test
 
 		$this->assertEquals([$mock], $this->object->getAttachments());
 
+		$this->assertEquals([$mock], $this->object->getInlineAttachments());
+
 		$this->assertTrue($this->object->hasAttachments());
 
 		$this->assertTrue($this->object->hasInlineAttachments());
