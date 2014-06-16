@@ -491,67 +491,6 @@ abstract class Transport
 	}
 
 	/**
-	 * Determines the facts for Content-Type
-	 *
-	 * @param Message $message
-	 *
-	 * @return integer
-	 *
-	 * @since 2.0
-	 */
-	protected function getMailType(Message $message)
-	{
-		/*
-		1: plain
-		2: html
-		4: attach
-		8: inline
-		16: alt
-		 */
-		$flags = 0;
-
-		// Determines attachment types
-		if ($hasAttachments = $message->hasAttachments())
-		{
-			if ($message->hasInlineAttachments())
-			{
-				$flags |= 8;
-
-				foreach ($message->getAttachments() as $attachment)
-				{
-					if ($attachment->isInline() === false)
-					{
-						$flags |= 4;
-						break;
-					}
-				}
-			}
-			else
-			{
-				$flags |= 4;
-			}
-		}
-
-		// Determines alternative body existence
-		if ($message->hasAltBody())
-		{
-			$flags |= 16;
-		}
-
-		// Determines message type
-		if ($message->isType(Message::PLAIN))
-		{
-			$flags |= 1;
-		}
-		else
-		{
-			$flags |= 2;
-		}
-
-		return $flags;
-	}
-
-	/**
 	 * Returns Content-Type
 	 *
 	 * @param Message $message
@@ -563,6 +502,15 @@ abstract class Transport
 	 */
 	protected function getContentType(Message $message, $boundary)
 	{
+		$hasAttachments = $hasAttachment = $message->hasAttachments();
+		$hasAlt = $message->hasAltBody();
+		$isPlain = $message->isType(Message::PLAIN);
+
+		if ($hasInline = $message->hasInlineAttachments())
+		{
+			$hasAttachment = $message->getAttachments() === $message->getInlineAttachments();
+		}
+
 		$related = 'multipart/related; ';
 
 		if ($this->config['email']['force_mixed'])
@@ -570,28 +518,25 @@ abstract class Transport
 			$related = 'multipart/mixed; ';
 		}
 
-		$flags = $this->getMailType($message);
-
-		// TODO Make sure all types are processed
-		switch ($flags)
+		if ($isPlain)
 		{
-			case 1:
-				return 'text/plain; charset="'.$this->config['email']['charset'].'"';
-			case 2:
-				return 'text/html; charset="'.$this->config['email']['charset'].'"';
-			case 5:
-			case 6:
+			if ($hasAttachments)
+			{
 				return $related . $boundary;
-			case 22:
-			case 30:
-				return 'multipart/mixed; ' . $boundary;
-			case 10:
-			case 18:
-			case 26:
-				return 'multipart/alternative; ' . $boundary;
-			default:
-				throw new UnexpectedValueException('Invalid mail type. [' . $flags . ']');
+			}
+
+			return 'text/plain; charset="'.$this->config['email']['charset'].'"';
 		}
+		elseif (($hasAlt or $hasInline) and $hasAttachment === false)
+		{
+			return 'multipart/alternative; ' . $boundary;
+		}
+		elseif ($hasAlt and $hasAttachments)
+		{
+			return 'multipart/mixed; ' . $boundary;
+		}
+
+		return 'text/html; charset="'.$this->config['email']['charset'].'"';
 	}
 
 	/**
