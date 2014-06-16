@@ -25,11 +25,11 @@ use InvalidArgumentException;
 abstract class Transport
 {
 	/**
-	 * Passed configuration array
+	 * Passed Config object
 	 *
-	 * @var []
+	 * @var Config
 	 */
-	protected $config = [];
+	protected $config;
 
 	/**
 	 * Global email configuration defaults
@@ -103,7 +103,7 @@ abstract class Transport
 	/**
 	 * The main sending function
 	 *
-	 * @param  Message $message
+	 * @param Message $message
 	 *
 	 * @return boolean Success or failure
 	 *
@@ -114,7 +114,7 @@ abstract class Transport
 	/**
 	 * Builds the message itself
 	 *
-	 * @param  Message $message
+	 * @param Message $message
 	 *
 	 * @return array
 	 */
@@ -162,7 +162,7 @@ abstract class Transport
 	/**
 	 * Processes HTML body
 	 *
-	 * @param  Message $message
+	 * @param Message $message
 	 *
 	 * @since 2.0
 	 */
@@ -264,7 +264,7 @@ abstract class Transport
 	/**
 	 * Builds headers
 	 *
-	 * @param  Message $message
+	 * @param Message $message
 	 *
 	 * @return []
 	 *
