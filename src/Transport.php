@@ -13,6 +13,7 @@ namespace Fuel\Email;
 use Fuel\FileSystem\Finder;
 use Fuel\Config\Container as Config;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 /**
  * Defines an abstract class for Transport
@@ -118,7 +119,7 @@ abstract class Transport
 	 *
 	 * @return array
 	 */
-	public function buildMessage(Message $message)
+	public function buildMessage(Message $message, $formatHeaders = false)
 	{
 		$this->checkMessage($message);
 
@@ -128,6 +129,12 @@ abstract class Transport
 		}
 
 		$headers = $this->buildHeaders($message);
+
+		if ($formatHeaders)
+		{
+			$headers = $this->formatHeaders($headers);
+		}
+
 		$body = $message->getBody();
 
 		return compact('headers', 'body');
@@ -294,6 +301,34 @@ abstract class Transport
 		}
 
 		$headers['Subject'] = $subject;
+
+		// TODO Add boundary
+		$headers['Content-Type'] = $this->getContentType($message, '');
+
+		$headers['Content-Transfer-Encoding'] = $this->config['email']['encoding'];
+
+		return $headers;
+	}
+
+	/**
+	 * Formats headers into string
+	 *
+	 * @param []  $headers
+	 *
+	 * @return string
+	 *
+	 * @since 2.0
+	 */
+	protected function formatHeaders(array $headers)
+	{
+		$formatted = '';
+
+		foreach ($headers as $key => $value)
+		{
+			$formatted .= $key . ': ' . $value . $config['email']['newline'];
+		}
+
+		return $formatted;
 	}
 
 	/**
@@ -456,6 +491,67 @@ abstract class Transport
 	}
 
 	/**
+	 * Determines the facts for Content-Type
+	 *
+	 * @param Message $message
+	 *
+	 * @return integer
+	 *
+	 * @since 2.0
+	 */
+	protected function getMailType(Message $message)
+	{
+		/*
+		1: plain
+		2: html
+		4: attach
+		8: inline
+		16: alt
+		 */
+		$flags = 0;
+
+		// Determines attachment types
+		if ($hasAttachments = $message->hasAttachments())
+		{
+			if ($message->hasInlineAttachments())
+			{
+				$flags |= 8;
+
+				foreach ($message->getAttachments() as $attachment)
+				{
+					if ($attachment->isInline() === false)
+					{
+						$flags |= 4;
+						break;
+					}
+				}
+			}
+			else
+			{
+				$flags |= 4;
+			}
+		}
+
+		// Determines alternative body existence
+		if ($message->hasAltBody())
+		{
+			$flags |= 16;
+		}
+
+		// Determines message type
+		if ($message->isType(Message::PLAIN))
+		{
+			$flags |= 1;
+		}
+		else
+		{
+			$flags |= 2;
+		}
+
+		return $flags;
+	}
+
+	/**
 	 * Returns Content-Type
 	 *
 	 * @param Message $message
@@ -467,38 +563,34 @@ abstract class Transport
 	 */
 	protected function getContentType(Message $message, $boundary)
 	{
-		if ($hasAttachments = $message->hasAttachments())
+		$related = 'multipart/related; ';
+
+		if ($this->config['email']['force_mixed'])
 		{
-			$related = 'multipart/related; ';
-
-			if ($this->config['email']['force_mixed'])
-			{
-				$related = 'multipart/mixed; ';
-			}
-
-			$inline = false;
-			$attachements = false;
-
-			foreach ($message->getAttachments() as $attachment)
-			{
-				if ($inline and $attachments)
-				{
-					continue;
-				}
-
-
-			}
+			$related = 'multipart/mixed; ';
 		}
 
+		$flags = $this->getMailType($message);
 
-		if ($message->isType(Message::PLAIN))
+		// TODO Make sure all types are processed
+		switch ($flags)
 		{
-			if ($message->hasAttachments())
-			{
-				return $related.$boundary;
-			}
-
-			return 'text/plain';
+			case 1:
+				return 'text/plain; charset="'.$this->config['email']['charset'].'"';
+			case 2:
+				return 'text/html; charset="'.$this->config['email']['charset'].'"';
+			case 5:
+			case 6:
+				return $related . $boundary;
+			case 22:
+			case 30:
+				return 'multipart/mixed; ' . $boundary;
+			case 10:
+			case 18:
+			case 26:
+				return 'multipart/alternative; ' . $boundary;
+			default:
+				throw new UnexpectedValueException('Invalid mail type. [' . $flags . ']');
 		}
 	}
 
